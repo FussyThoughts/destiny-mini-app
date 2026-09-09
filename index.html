@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Судьба</title>
 
   <style>
@@ -20,14 +21,21 @@
 
     .app {
       max-width: 520px;
+      min-height: 100vh;
       margin: auto;
       padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .header {
       text-align: center;
     }
 
     .symbol {
       font-size: 50px;
-      margin-top: 30px;
+      margin-top: 20px;
     }
 
     h1 {
@@ -45,6 +53,7 @@
     .question {
       font-size: 23px;
       line-height: 1.5;
+      text-align: center;
       margin-bottom: 30px;
     }
 
@@ -64,51 +73,169 @@
       font-size: 16px;
       line-height: 1.5;
       text-align: left;
+      cursor: pointer;
+      transition: 0.25s;
     }
 
     .answer:active {
+      transform: scale(0.98);
+    }
+
+    .answer.selected {
       background: #30234a;
+      border-color: #9b7ac7;
+    }
+
+    .fade {
+      animation: fade 0.35s ease;
+    }
+
+    @keyframes fade {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <div class="app">
+  <main class="app">
 
-    <div class="symbol">☯</div>
+    <div class="header">
 
-    <h1>СУДЬБА</h1>
+      <div class="symbol">☯</div>
 
-    <div class="progress">
-      ВОПРОС 1 ИЗ 5
-    </div>
+      <h1>СУДЬБА</h1>
 
-    <div class="question">
-      Ты станешь собой без капли сожаления, выбрав…
-    </div>
-
-    <div class="answers">
-
-      <button class="answer">
-        ⚔️ Силу, с которой нельзя не считаться.
-      </button>
-
-      <button class="answer">
-        👑 Власть, устрашающую и благодетельную.
-      </button>
-
-      <button class="answer">
-        ❤️ Любовь, от которой невозможно отказаться.
-      </button>
-
-      <button class="answer">
-        🕊️ Свободу в каждом вдохе.
-      </button>
+      <div id="progress" class="progress">
+        ВОПРОС 1 ИЗ 5
+      </div>
 
     </div>
 
-  </div>
+    <section id="questionScreen" class="fade">
+
+      <div id="question" class="question"></div>
+
+      <div id="answers" class="answers"></div>
+
+    </section>
+
+  </main>
+
+
+  <script>
+
+    const questions = [
+
+      {
+        text: "Ты станешь собой без капли сожаления, выбрав…",
+
+        answers: [
+          "⚔️ Силу, с которой нельзя не считаться.",
+          "👑 Власть, устрашающую и благодетельную.",
+          "❤️ Любовь, от которой невозможно отказаться.",
+          "🕊️ Свободу в каждом вдохе."
+        ]
+      },
+
+      {
+        text: "Тот, кому ты доверял больше всего, предал тебя. Что ты сделаешь?",
+
+        answers: [
+          "⚔️ Отомщу, чтобы он никогда не забыл.",
+          "🚶 Уйду. Некоторые связи должны умереть.",
+          "❤️ Попытаюсь понять причину его поступка.",
+          "🔥 Сотру прошлое и начну всё заново."
+        ]
+      }
+
+    ];
+
+
+    let currentQuestion = 0;
+
+    const chosenAnswers = [];
+
+
+    function showQuestion() {
+
+      const question = questions[currentQuestion];
+
+      document.getElementById("progress").textContent =
+        "ВОПРОС " + (currentQuestion + 1) + " ИЗ 5";
+
+      document.getElementById("question").textContent =
+        question.text;
+
+      const answersContainer =
+        document.getElementById("answers");
+
+      answersContainer.innerHTML = "";
+
+      question.answers.forEach((answer, index) => {
+
+        const button = document.createElement("button");
+
+        button.className = "answer";
+
+        button.textContent = answer;
+
+        button.onclick = () => chooseAnswer(index, button);
+
+        answersContainer.appendChild(button);
+
+      });
+
+      const screen =
+        document.getElementById("questionScreen");
+
+      screen.classList.remove("fade");
+
+      void screen.offsetWidth;
+
+      screen.classList.add("fade");
+    }
+
+
+    function chooseAnswer(index, button) {
+
+      chosenAnswers[currentQuestion] = index;
+
+      button.classList.add("selected");
+
+      setTimeout(() => {
+
+        if (currentQuestion < questions.length - 1) {
+
+          currentQuestion++;
+
+          showQuestion();
+
+        } else {
+
+          alert(
+            "Первые ответы приняты.\n\n" +
+            "Судьба продолжает пробуждаться..."
+          );
+
+        }
+
+      }, 300);
+
+    }
+
+
+    showQuestion();
+
+  </script>
 
 </body>
 </html>
