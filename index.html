@@ -50,6 +50,35 @@ button {
 
 
 /* =========================
+   INCOMING CHALLENGE
+========================= */
+
+function loadChallenge() {
+
+    const params = new URLSearchParams(window.location.search);
+    const challengedBy = params.get("challenge");
+
+    if (!challengedBy) return;
+
+    const rarity = params.get("rarity");
+    const path = params.get("path");
+
+    challengeText.textContent =
+        "Тебе бросили вызов: «" +
+        challengedBy +
+        "»" +
+        (rarity ? " · " + rarity : "") +
+        (path ? " · " + path : "") +
+        ". Сможешь получить судьбу сильнее?";
+
+    challengeBanner.classList.remove("hidden");
+
+}
+
+loadChallenge();
+
+
+/* =========================
    START
 ========================= */
 
@@ -299,21 +328,25 @@ button {
 
 .friend-button {
     width: 100%;
-    margin-top: 10px;
-    padding: 14px 24px;
-    border: 1px solid #665477;
-    border-radius: 11px;
-    background: rgba(255, 255, 255, 0.025);
-    color: #cfc6d8;
-    font-size: 14px;
+    margin-top: 23px;
+    padding: 18px 28px;
+    border: 1px solid #b18ad2;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(150, 95, 205, 0.30), rgba(90, 55, 130, 0.22));
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
     cursor: pointer;
     touch-action: manipulation;
     transition: 0.2s ease;
+    box-shadow: 0 8px 28px rgba(100, 60, 150, 0.18);
 }
 
 .friend-button:hover {
-    background: rgba(143, 120, 173, 0.10);
-    border-color: #806b91;
+    background: linear-gradient(135deg, rgba(165, 105, 220, 0.40), rgba(105, 65, 150, 0.30));
+    border-color: #c7a4e4;
+    transform: translateY(-1px);
 }
 
 .friend-button:active {
@@ -341,6 +374,31 @@ button {
     transform: scale(0.97);
 }
 
+
+.challenge-banner {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 22px 0 4px;
+    padding: 14px 16px;
+    border: 1px solid rgba(177, 138, 210, 0.55);
+    border-radius: 13px;
+    background: rgba(120, 80, 160, 0.12);
+    text-align: center;
+    animation: fadeIn 0.4s ease;
+}
+
+.challenge-kicker {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: #b99ad2;
+    margin-bottom: 7px;
+}
+
+.challenge-text {
+    color: #eee7f3;
+    font-size: 14px;
+    line-height: 1.45;
+}
 
 /* =========================
    ANIMATIONS
@@ -461,6 +519,11 @@ button {
     <div class="subtitle">
         Небеса уже сделали свой выбор.<br>
         Осталось узнать — какой.
+    </div>
+
+    <div id="challengeBanner" class="challenge-banner hidden">
+        <div class="challenge-kicker">⚔️ ТЕБЕ БРОСИЛИ ВЫЗОВ</div>
+        <div id="challengeText" class="challenge-text"></div>
     </div>
 
     <button
@@ -834,6 +897,12 @@ const startButton =
 
 const restartButton =
     document.getElementById("restartButton");
+
+const challengeBanner =
+    document.getElementById("challengeBanner");
+
+const challengeText =
+    document.getElementById("challengeText");
 
 const friendButton =
     document.getElementById("friendButton");
@@ -1345,6 +1414,35 @@ function showQuestion() {
 
 
 /* =========================
+   INCOMING CHALLENGE
+========================= */
+
+function loadChallenge() {
+
+    const params = new URLSearchParams(window.location.search);
+    const challengedBy = params.get("challenge");
+
+    if (!challengedBy) return;
+
+    const rarity = params.get("rarity");
+    const path = params.get("path");
+
+    challengeText.textContent =
+        "Тебе бросили вызов: «" +
+        challengedBy +
+        "»" +
+        (rarity ? " · " + rarity : "") +
+        (path ? " · " + path : "") +
+        ". Сможешь получить судьбу сильнее?";
+
+    challengeBanner.classList.remove("hidden");
+
+}
+
+loadChallenge();
+
+
+/* =========================
    START
 ========================= */
 
@@ -1441,9 +1539,9 @@ function haptic() {
 }
 
 
-async function openShare(text, title) {
+async function openShare(text, title, shareUrl) {
 
-    const url = window.location.href;
+    const url = shareUrl || window.location.href;
 
     haptic();
 
@@ -1543,18 +1641,28 @@ async function shareDestiny() {
 
 async function challengeFriend() {
 
+    const params = new URLSearchParams();
+
+    params.set("challenge", resultTitle.textContent);
+    params.set("rarity", resultRarity.textContent);
+    params.set("path", resultPath.textContent.replace("Путь: ", ""));
+
+    const challengeUrl =
+        window.location.origin +
+        window.location.pathname +
+        "?" +
+        params.toString();
+
     await openShare(
         "Мне выпала судьба «" +
         resultTitle.textContent +
-        "» — " +
-        resultRarity.textContent +
-        ".\n\n" +
+        "».\n\n" +
         "⚔️ Бросаю тебе вызов. Пройди испытание и узнай, какая судьба достанется тебе.",
-        "Вызов судьбы"
+        "Вызов судьбы",
+        challengeUrl
     );
 
 }
-
 
 /* =========================
    BUTTONS
