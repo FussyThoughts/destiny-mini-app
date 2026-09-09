@@ -10,7 +10,8 @@
 body {
     margin: 0;
     min-height: 100vh;
-    background: #09090f;
+    background:
+        radial-gradient(circle at 50% 35%, #17172a 0%, #09090f 55%, #050509 100%);
     color: #f5f5f5;
     font-family: Arial, sans-serif;
     display: flex;
@@ -22,6 +23,79 @@ body {
 .app {
     width: 100%;
     max-width: 520px;
+}
+
+/* =========================
+   START SCREEN
+========================= */
+
+.start {
+    text-align: center;
+    animation: fadeIn 1.2s ease;
+}
+
+.start-symbol {
+    font-size: 72px;
+    margin-bottom: 18px;
+    opacity: 0.95;
+    animation: float 4s ease-in-out infinite;
+}
+
+.start h1 {
+    font-size: 52px;
+    margin: 0;
+    letter-spacing: 10px;
+}
+
+.start-line {
+    width: 100px;
+    height: 1px;
+    background: #555566;
+    margin: 25px auto;
+}
+
+.start-subtitle {
+    font-size: 19px;
+    line-height: 1.7;
+    color: #cccccc;
+    margin-bottom: 35px;
+}
+
+.start-button {
+    width: 100%;
+    max-width: 360px;
+    padding: 19px;
+    border: 1px solid #555566;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #181827, #222238);
+    color: white;
+    font-size: 18px;
+    text-align: center;
+    cursor: pointer;
+    touch-action: manipulation;
+    transition: 0.2s;
+}
+
+.start-button:hover {
+    background: #292940;
+}
+
+.start-button:active {
+    transform: scale(0.97);
+}
+
+.start-note {
+    margin-top: 20px;
+    color: #666677;
+    font-size: 13px;
+}
+
+/* =========================
+   QUIZ
+========================= */
+
+.quiz-screen {
+    animation: fadeIn 0.5s ease;
 }
 
 h1 {
@@ -62,6 +136,7 @@ button {
     text-align: left;
     cursor: pointer;
     touch-action: manipulation;
+    transition: 0.2s;
 }
 
 button:hover {
@@ -72,8 +147,13 @@ button:active {
     transform: scale(0.98);
 }
 
+/* =========================
+   RESULT
+========================= */
+
 .result {
     text-align: center;
+    animation: fadeIn 1s ease;
 }
 
 .result-symbol {
@@ -115,8 +195,33 @@ button:active {
     text-align: center;
     margin-top: 10px;
 }
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
 </style></head><body><div class="app">
-    <h1>СУДЬБА</h1>
     <div id="quiz"></div>
 </div><script>
 
@@ -254,6 +359,7 @@ const questions = [
 
 ];
 
+
 let currentQuestion = 0;
 
 let scores = {
@@ -262,6 +368,7 @@ let scores = {
     "Любовь": 0,
     "Свобода": 0
 };
+
 
 let stats = {
     strength: 0,
@@ -274,8 +381,56 @@ let stats = {
     sacrifice: 0
 };
 
+
 const quiz = document.getElementById("quiz");
 
+
+/* =========================
+   START SCREEN
+========================= */
+
+function showStart() {
+
+    quiz.innerHTML = "";
+
+    const start = document.createElement("div");
+    start.className = "start";
+
+    start.innerHTML = `
+        <div class="start-symbol">☯</div>
+
+        <h1>СУДЬБА</h1>
+
+        <div class="start-line"></div>
+
+        <div class="start-subtitle">
+            Небеса уже сделали свой выбор.<br>
+            Осталось узнать — какой.
+        </div>
+
+        <button class="start-button" id="startButton">
+            ✦ Узнать свою судьбу
+        </button>
+
+        <div class="start-note">
+            5 вопросов · 1 судьба
+        </div>
+    `;
+
+    quiz.appendChild(start);
+
+    document
+        .getElementById("startButton")
+        .addEventListener("click", function() {
+            currentQuestion = 0;
+            showQuestion();
+        });
+}
+
+
+/* =========================
+   QUESTIONS
+========================= */
 
 function showQuestion() {
 
@@ -283,11 +438,17 @@ function showQuestion() {
 
     quiz.innerHTML = "";
 
+    const screen = document.createElement("div");
+    screen.className = "quiz-screen";
+
     const progress = document.createElement("div");
     progress.className = "progress";
+
     progress.textContent =
-        "Вопрос " + (currentQuestion + 1) +
-        " из " + questions.length;
+        "Вопрос " +
+        (currentQuestion + 1) +
+        " из " +
+        questions.length;
 
     const questionText = document.createElement("div");
     questionText.className = "question";
@@ -325,11 +486,17 @@ function showQuestion() {
 
     });
 
-    quiz.appendChild(progress);
-    quiz.appendChild(questionText);
-    quiz.appendChild(answersContainer);
+    screen.appendChild(progress);
+    screen.appendChild(questionText);
+    screen.appendChild(answersContainer);
+
+    quiz.appendChild(screen);
 }
 
+
+/* =========================
+   RESULT
+========================= */
 
 function showResult() {
 
@@ -372,6 +539,10 @@ function showResult() {
 }
 
 
+/* =========================
+   DESTINY ENGINE
+========================= */
+
 function getDestiny() {
 
     let maxScore = -1;
@@ -386,9 +557,11 @@ function getDestiny() {
 
     }
 
+
     const destinies = {
 
         "Сила": [
+
             {
                 symbol: "⚔️",
                 name: "Носитель Кровавого Клинка",
@@ -400,6 +573,7 @@ function getDestiny() {
                     "где заканчивается чужая власть над тобой.",
                 score: stats.cruelty * 3 + stats.strength
             },
+
             {
                 symbol: "🛡️",
                 name: "Последний Страж",
@@ -410,6 +584,7 @@ function getDestiny() {
                     "Но однажды тебе придётся понять: даже стена не может защищать всех вечно.",
                 score: stats.sacrifice * 3 + stats.loyalty
             },
+
             {
                 symbol: "🔥",
                 name: "Пепельный Разрушитель",
@@ -419,6 +594,7 @@ function getDestiny() {
                     "Тебе не нужна победа. Иногда тебе нужно, чтобы после тебя ничего не осталось.",
                 score: stats.cruelty * 2 + stats.rebellion * 2
             },
+
             {
                 symbol: "🌌",
                 name: "Воин Небесного Предела",
@@ -430,9 +606,12 @@ function getDestiny() {
                     "который Небеса назвали невозможным.",
                 score: stats.strength * 3 + stats.rebellion
             }
+
         ],
 
+
         "Власть": [
+
             {
                 symbol: "👑",
                 name: "Властелин Девяти Небес",
@@ -443,6 +622,7 @@ function getDestiny() {
                     "Но чем выше трон, тем дальше от тебя люди.",
                 score: stats.power * 3
             },
+
             {
                 symbol: "⚖️",
                 name: "Безмолвный Судья",
@@ -453,6 +633,7 @@ function getDestiny() {
                     "а затем выносишь приговор, от которого никто не сможет скрыться.",
                 score: stats.loyalty * 2 + stats.strength + stats.cruelty
             },
+
             {
                 symbol: "🕸️",
                 name: "Кукловод Судеб",
@@ -464,6 +645,7 @@ function getDestiny() {
                     "а тот, кто заранее решил, куда он будет нанесён.",
                 score: stats.power * 2 + stats.loyalty + stats.rebellion
             },
+
             {
                 symbol: "🌑",
                 name: "Тот, Кто Сидит Над Небесами",
@@ -474,9 +656,12 @@ function getDestiny() {
                     "Ты поднимешь взгляд выше — туда, где Небеса сами считают себя властителями.",
                 score: stats.power * 3 + stats.rebellion * 2
             }
+
         ],
 
+
         "Любовь": [
+
             {
                 symbol: "❤️",
                 name: "Хранитель Последнего Обета",
@@ -487,6 +672,7 @@ function getDestiny() {
                     "Даже если весь мир забудет — ты будешь помнить.",
                 score: stats.loyalty * 3
             },
+
             {
                 symbol: "🌅",
                 name: "Тот, Кто Вернул Утраченное",
@@ -497,6 +683,7 @@ function getDestiny() {
                     "Там, где другие видят конец, ты продолжаешь искать путь обратно.",
                 score: stats.sacrifice * 2 + stats.loyalty
             },
+
             {
                 symbol: "🧵",
                 name: "Связанный Красной Нитью",
@@ -508,6 +695,7 @@ function getDestiny() {
                     "ты бросишь им вызов.",
                 score: stats.love * 3 + stats.rebellion
             },
+
             {
                 symbol: "🌙",
                 name: "Любящий Даже После Смерти",
@@ -519,9 +707,12 @@ function getDestiny() {
                     "что он оставил в твоём сердце.",
                 score: stats.sacrifice * 3 + stats.love
             }
+
         ],
 
+
         "Свобода": [
+
             {
                 symbol: "🕊️",
                 name: "Странник За Пределами Небес",
@@ -532,6 +723,7 @@ function getDestiny() {
                     "не смогут навсегда указать тебе, куда идти.",
                 score: stats.freedom * 3
             },
+
             {
                 symbol: "🌙",
                 name: "Искатель Третьего Пути",
@@ -542,6 +734,7 @@ function getDestiny() {
                     "Когда говорят, что выхода нет, ты начинаешь искать дверь.",
                 score: stats.rebellion * 3 + stats.freedom
             },
+
             {
                 symbol: "⚡",
                 name: "Отступник Небесного Закона",
@@ -552,6 +745,7 @@ function getDestiny() {
                     "Если закон несправедлив — ты нарушишь его.",
                 score: stats.rebellion * 3 + stats.strength
             },
+
             {
                 symbol: "🌌",
                 name: "Тот, Кого Не Смогла Найти Судьба",
@@ -561,9 +755,11 @@ function getDestiny() {
                     "Небеса записывают имена всех рождённых. Твоего имени среди них нет.",
                 score: stats.freedom * 2 + stats.rebellion * 2
             }
+
         ]
 
     };
+
 
     const possibleDestinies = destinies[selectedPath];
 
@@ -581,33 +777,13 @@ function getDestiny() {
 }
 
 
+/* =========================
+   RESTART
+========================= */
+
 function restartQuiz() {
 
     currentQuestion = 0;
 
     scores = {
-        "Сила": 0,
-        "Власть": 0,
-        "Любовь": 0,
-        "Свобода": 0
-    };
-
-    stats = {
-        strength: 0,
-        power: 0,
-        love: 0,
-        freedom: 0,
-        cruelty: 0,
-        loyalty: 0,
-        rebellion: 0,
-        sacrifice: 0
-    };
-
-    showQuestion();
-}
-
-
-showQuestion();
-
-</script></body>
-</html>
+       
