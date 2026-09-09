@@ -3,26 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <meta name="format-detection" content="telephone=no">
   <title>Судьба</title>
 
   <style>
     * {
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
     }
 
     body {
-      margin: 0;
-      min-height: 100vh;
       background: #0b0912;
-      color: white;
+      color: #ffffff;
       font-family: Arial, sans-serif;
     }
 
     .app {
+      width: 100%;
       max-width: 520px;
       min-height: 100vh;
-      margin: auto;
+      margin: 0 auto;
       padding: 30px 20px;
       display: flex;
       flex-direction: column;
@@ -34,72 +41,78 @@
     }
 
     .symbol {
-      font-size: 50px;
-      margin-top: 20px;
+      font-size: 48px;
+      margin-bottom: 12px;
     }
 
     h1 {
+      margin: 0 0 12px;
       font-size: 32px;
       letter-spacing: 5px;
-      margin: 15px 0 10px;
     }
 
     .progress {
+      margin-bottom: 38px;
       color: #777080;
       font-size: 13px;
-      margin-bottom: 40px;
+      letter-spacing: 1px;
     }
 
     .question {
-      font-size: 23px;
-      line-height: 1.5;
+      margin-bottom: 28px;
       text-align: center;
-      margin-bottom: 30px;
+      font-size: 22px;
+      line-height: 1.5;
     }
 
     .answers {
+      width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
     }
 
     .answer {
+      appearance: none;
+      -webkit-appearance: none;
+
+      display: block;
       width: 100%;
-      padding: 18px;
-      border-radius: 16px;
+      min-height: 64px;
+
+      padding: 16px;
+
       border: 1px solid #403750;
+      border-radius: 16px;
+
       background: #181522;
-      color: white;
+      color: #ffffff;
+
+      font-family: Arial, sans-serif;
       font-size: 16px;
-      line-height: 1.5;
+      line-height: 1.45;
       text-align: left;
+
       cursor: pointer;
-      transition: 0.25s;
+
+      touch-action: manipulation;
     }
 
     .answer:active {
-      transform: scale(0.98);
+      background: #342552;
+      border-color: #8062b8;
     }
 
     .answer.selected {
-      background: #30234a;
-      border-color: #9b7ac7;
+      background: #342552;
+      border-color: #a98adf;
     }
 
-    .fade {
-      animation: fade 0.35s ease;
-    }
-
-    @keyframes fade {
-      from {
-        opacity: 0;
-        transform: translateY(12px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .message {
+      text-align: center;
+      color: #bcb3ca;
+      font-size: 16px;
+      line-height: 1.6;
     }
   </style>
 </head>
@@ -114,26 +127,27 @@
 
       <h1>СУДЬБА</h1>
 
-      <div id="progress" class="progress">
+      <div
+        class="progress"
+        id="progress">
         ВОПРОС 1 ИЗ 5
       </div>
 
     </div>
 
-    <section id="questionScreen" class="fade">
-
-      <div id="question" class="question"></div>
-
-      <div id="answers" class="answers"></div>
-
-    </section>
+    <div id="questionScreen"></div>
 
   </main>
 
 
   <script>
 
-    const questions = [
+    var currentQuestion = 0;
+
+    var userAnswers = [];
+
+
+    var questions = [
 
       {
         text: "Ты станешь собой без капли сожаления, выбрав…",
@@ -147,88 +161,206 @@
       },
 
       {
-        text: "Тот, кому ты доверял больше всего, предал тебя. Что ты сделаешь?",
+        text: "Твой близкий человек предал тебя. Что ты сделаешь?",
 
         answers: [
-          "⚔️ Отомщу, чтобы он никогда не забыл.",
-          "🚶 Уйду. Некоторые связи должны умереть.",
-          "❤️ Попытаюсь понять причину его поступка.",
-          "🔥 Сотру прошлое и начну всё заново."
+          "⚔️ Отомщу. Предательство должно иметь цену.",
+          "🚶 Уйду. Некоторые люди должны остаться в прошлом.",
+          "❤️ Попытаюсь понять причину.",
+          "🔥 Сожгу всё, что связывало нас."
+        ]
+      },
+
+      {
+        text: "Перед тобой путь к бессмертию. Его цена — жизнь незнакомца.",
+
+        answers: [
+          "🩸 Заплачу цену. Я выбрал свой путь.",
+          "🚫 Откажусь. Чужая жизнь не стоит моего бессмертия.",
+          "🎲 Найду третий путь.",
+          "🤐 Сначала узнаю, кто этот человек."
+        ]
+      },
+
+      {
+        text: "Что страшнее всего потерять?",
+
+        answers: [
+          "🪞 Себя.",
+          "🏯 Семью.",
+          "🕊️ Свободу.",
+          "🌑 Смысл."
+        ]
+      },
+
+      {
+        text: "Ты получил силу, которой больше никто не обладает.",
+
+        answers: [
+          "🤫 Спрячу её.",
+          "❤️ Использую ради близких.",
+          "👑 Подчиню мир.",
+          "🔮 Попытаюсь понять её природу."
         ]
       }
 
     ];
 
 
-    let currentQuestion = 0;
-
-    const chosenAnswers = [];
-
-
     function showQuestion() {
 
-      const question = questions[currentQuestion];
+      var question = questions[currentQuestion];
 
-      document.getElementById("progress").textContent =
-        "ВОПРОС " + (currentQuestion + 1) + " ИЗ 5";
+      var progress = document.getElementById("progress");
 
-      document.getElementById("question").textContent =
+      progress.textContent =
+        "ВОПРОС " +
+        (currentQuestion + 1) +
+        " ИЗ " +
+        questions.length;
+
+
+      var screen =
+        document.getElementById("questionScreen");
+
+
+      screen.innerHTML = "";
+
+
+      var questionText =
+        document.createElement("div");
+
+      questionText.className = "question";
+
+      questionText.textContent =
         question.text;
 
-      const answersContainer =
-        document.getElementById("answers");
 
-      answersContainer.innerHTML = "";
+      screen.appendChild(questionText);
 
-      question.answers.forEach((answer, index) => {
 
-        const button = document.createElement("button");
+      var answers =
+        document.createElement("div");
+
+      answers.className = "answers";
+
+
+      for (
+        var i = 0;
+        i < question.answers.length;
+        i++
+      ) {
+
+        var button =
+          document.createElement("button");
+
+        button.type = "button";
 
         button.className = "answer";
 
-        button.textContent = answer;
+        button.textContent =
+          question.answers[i];
 
-        button.onclick = () => chooseAnswer(index, button);
 
-        answersContainer.appendChild(button);
+        button.dataset.answer =
+          i;
 
-      });
 
-      const screen =
-        document.getElementById("questionScreen");
+        button.addEventListener(
+          "click",
+          handleAnswer
+        );
 
-      screen.classList.remove("fade");
 
-      void screen.offsetWidth;
+        answers.appendChild(button);
 
-      screen.classList.add("fade");
+      }
+
+
+      screen.appendChild(answers);
+
     }
 
 
-    function chooseAnswer(index, button) {
+    function handleAnswer(event) {
 
-      chosenAnswers[currentQuestion] = index;
+      var button =
+        event.currentTarget;
+
+
+      var answerIndex =
+        Number(button.dataset.answer);
+
 
       button.classList.add("selected");
 
-      setTimeout(() => {
 
-        if (currentQuestion < questions.length - 1) {
+      userAnswers.push({
 
-          currentQuestion++;
+        question: currentQuestion,
+
+        answer: answerIndex
+
+      });
+
+
+      setTimeout(function() {
+
+        currentQuestion++;
+
+
+        if (
+          currentQuestion <
+          questions.length
+        ) {
 
           showQuestion();
 
         } else {
 
-          alert(
-            "Первые ответы приняты.\n\n" +
-            "Судьба продолжает пробуждаться..."
-          );
+          showResult();
 
         }
 
-      }, 300);
+      }, 180);
+
+    }
+
+
+    function showResult() {
+
+      document.getElementById("progress")
+        .textContent =
+        "СУДЬБА ОПРЕДЕЛЕНА";
+
+
+      var screen =
+        document.getElementById("questionScreen");
+
+
+      screen.innerHTML = "";
+
+
+      var result =
+        document.createElement("div");
+
+
+      result.className = "message";
+
+
+      result.innerHTML =
+        "<h2>Твоя судьба пробуждается…</h2>" +
+        "<p>Ты сделал свой выбор.</p>" +
+        "<p>Скоро мы узнаем, кем ты стал.</p>";
+
+
+      screen.appendChild(result);
+
+
+      console.log(
+        "Ответы:",
+        userAnswers
+      );
 
     }
 
