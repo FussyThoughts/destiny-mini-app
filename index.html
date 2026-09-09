@@ -1,1 +1,402 @@
+<!DOCTYPE html><html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>СУДЬБА</title><style>
+* {
+    box-sizing: border-box;
+}
 
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 50% 35%, #24163d 0%, #0d0a15 45%, #050508 100%);
+    color: #ffffff;
+    font-family: Georgia, "Times New Roman", serif;
+}
+
+.screen {
+    width: 100%;
+    max-width: 560px;
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* START */
+
+.symbol {
+    font-size: 64px;
+    margin-bottom: 18px;
+    opacity: 0.9;
+    animation: float 4s ease-in-out infinite;
+}
+
+h1 {
+    margin: 0;
+    font-size: 52px;
+    letter-spacing: 10px;
+    font-weight: 400;
+}
+
+.subtitle {
+    margin-top: 22px;
+    max-width: 390px;
+    color: #cfc6dc;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.start-button {
+    margin-top: 42px;
+    padding: 17px 34px;
+    border: 1px solid #8f78ad;
+    border-radius: 12px;
+    background: rgba(120, 80, 160, 0.18);
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 17px;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.start-button:active {
+    transform: scale(0.97);
+}
+
+.note {
+    margin-top: 18px;
+    color: #777080;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+}
+
+/* QUIZ */
+
+.quiz {
+    width: 100%;
+}
+
+.progress {
+    margin-bottom: 28px;
+    color: #8f78ad;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+}
+
+.question {
+    margin: 0 auto 30px;
+    max-width: 500px;
+    font-size: 24px;
+    line-height: 1.45;
+    font-weight: 400;
+}
+
+.answers {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.answer {
+    width: 100%;
+    padding: 17px 18px;
+    border: 1px solid rgba(143, 120, 173, 0.55);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.035);
+    color: #eee9f2;
+    font-family: inherit;
+    font-size: 16px;
+    line-height: 1.4;
+    text-align: left;
+    cursor: pointer;
+    touch-action: manipulation;
+    transition: 0.2s ease;
+}
+
+.answer:active {
+    transform: scale(0.98);
+}
+
+.answer:hover {
+    background: rgba(143, 120, 173, 0.16);
+    border-color: #9f86bd;
+}
+
+/* FINISH */
+
+.finish-symbol {
+    font-size: 58px;
+    margin-bottom: 20px;
+}
+
+.finish-title {
+    font-size: 32px;
+    font-weight: 400;
+    margin-bottom: 18px;
+}
+
+.finish-text {
+    max-width: 390px;
+    color: #cfc6dc;
+    font-size: 17px;
+    line-height: 1.6;
+}
+
+.restart-button {
+    margin-top: 32px;
+    padding: 14px 28px;
+    border: 1px solid #665477;
+    border-radius: 10px;
+    background: transparent;
+    color: #aaa0b4;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade {
+    animation: fadeIn 0.4s ease;
+}
+</style></head><body><!-- START SCREEN --><section id="startScreen" class="screen"><div class="symbol">☯</div>
+
+<h1>СУДЬБА</h1>
+
+<div class="subtitle">
+    Небеса уже сделали свой выбор.<br>
+    Осталось узнать — какой.
+</div>
+
+<button id="startButton" class="start-button" type="button">
+    ✦ Узнать свою судьбу
+</button>
+
+<div class="note">
+    5 вопросов · 1 судьба
+</div>
+
+</section><!-- QUIZ SCREEN --><section id="quizScreen" class="screen hidden"><div class="quiz">
+
+    <div id="progress" class="progress">
+        ВОПРОС 1 ИЗ 5
+    </div>
+
+    <h2 id="question" class="question"></h2>
+
+    <div id="answers" class="answers"></div>
+
+</div>
+
+</section><!-- FINISH SCREEN --><section id="finishScreen" class="screen hidden"><div class="finish-symbol">☯</div>
+
+<div class="finish-title">
+    Путь завершён
+</div>
+
+<div class="finish-text">
+    Ты сделал пять выборов.<br><br>
+    Теперь осталось узнать,<br>
+    какую судьбу они создали.
+</div>
+
+<button id="restartButton" class="restart-button" type="button">
+    Начать заново
+</button>
+
+</section><script>
+
+const questions = [
+
+    {
+        text: "Ты станешь собой без капли сожаления, выбрав…",
+        answers: [
+            "⚔️ Силу, с которой нельзя не считаться.",
+            "👑 Власть, устрашающую и благодетельную.",
+            "❤️ Любовь, от которой невозможно отказаться.",
+            "🕊️ Свободу в каждом вдохе."
+        ]
+    },
+
+    {
+        text: "Предательство коснулось тебя. Что ты сделаешь?",
+        answers: [
+            "☠️ Раздашь угощения всем причастным. Пусть каждый получит то, что заслужил.",
+            "🌊 Станешь каплей в океане. Исчезнешь из их жизни, оставив всё в прошлом.",
+            "🧹 Заменишь все тряпки в доме. Простишь. Даже если помнить придётся всегда.",
+            "⚔️ Обнажишь зеркальный клинок. Ответишь им тем же — ни больше, ни меньше."
+        ]
+    },
+
+    {
+        text: "Перед тобой врата бессмертия. Но чтобы открыть их, кто-то должен остаться по ту сторону. Что ты сделаешь?",
+        answers: [
+            "🩸 Пройдёшь сквозь врата. Чужая судьба — не моя цена.",
+            "🚪 Оставишь врата закрытыми. Есть вещи, ради которых не стоит становиться бессмертным.",
+            "🌙 Искать третий путь. Если судьба поставила два выбора — значит, она что-то скрывает.",
+            "👁️ Сначала посмотришь, кто стоит за вратами. Прежде чем сделать шаг, нужно увидеть всю картину."
+        ]
+    },
+
+    {
+        text: "Если Небеса потребуют от тебя отдать самое дорогое, что ты не позволишь им забрать?",
+        answers: [
+            "🪞 Своё отражение. Я не позволю себе стать кем-то другим.",
+            "🏯 Тех, кого называю семьёй. Пусть рушатся Небеса — их я не отдам.",
+            "🕊️ Свободу. Даже вечная жизнь не стоит одной цепи.",
+            "🌑 Смысл. Если исчезнет он — зачем тогда мне всё остальное?"
+        ]
+    },
+
+    {
+        text: "Однажды тебе в руки попадёт сила, которой больше нет ни у кого. Что станет твоим первым шагом?",
+        answers: [
+            "🌫️ Спрячешь её. Самая опасная сила — та, о которой знают все.",
+            "❤️ Отдашь её тем, кто тебе дорог. Если сила ничего не меняет для близких — зачем она нужна?",
+            "👑 Поставишь мир на колени. Тот, кто получил силу, должен решить, как ею распорядиться.",
+            "🔮 Попытаешься понять её. Прежде чем использовать силу, я хочу узнать, почему она выбрала меня."
+        ]
+    }
+
+];
+
+
+let currentQuestion = 0;
+let selectedAnswers = [];
+
+
+const startScreen = document.getElementById("startScreen");
+const quizScreen = document.getElementById("quizScreen");
+const finishScreen = document.getElementById("finishScreen");
+
+const startButton = document.getElementById("startButton");
+const restartButton = document.getElementById("restartButton");
+
+const progress = document.getElementById("progress");
+const question = document.getElementById("question");
+const answers = document.getElementById("answers");
+
+
+function showScreen(screen) {
+
+    startScreen.classList.add("hidden");
+    quizScreen.classList.add("hidden");
+    finishScreen.classList.add("hidden");
+
+    screen.classList.remove("hidden");
+}
+
+
+function showQuestion() {
+
+    const q = questions[currentQuestion];
+
+    progress.textContent =
+        "ВОПРОС " + (currentQuestion + 1) + " ИЗ " + questions.length;
+
+    question.textContent = q.text;
+
+    answers.innerHTML = "";
+
+    q.answers.forEach(function(answerText, index) {
+
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.className = "answer";
+        button.textContent = answerText;
+
+        button.addEventListener("click", function() {
+
+            selectedAnswers.push({
+                question: currentQuestion,
+                answer: index
+            });
+
+            currentQuestion++;
+
+            if (currentQuestion < questions.length) {
+
+                showQuestion();
+
+            } else {
+
+                showScreen(finishScreen);
+
+            }
+
+        });
+
+        answers.appendChild(button);
+
+    });
+
+}
+
+
+function startQuiz() {
+
+    currentQuestion = 0;
+    selectedAnswers = [];
+
+    showScreen(quizScreen);
+    showQuestion();
+
+}
+
+
+function restartQuiz() {
+
+    currentQuestion = 0;
+    selectedAnswers = [];
+
+    showScreen(startScreen);
+
+}
+
+
+startButton.addEventListener("click", startQuiz);
+
+restartButton.addEventListener("click", restartQuiz);
+
+
+</script></body>
+                                </html>
