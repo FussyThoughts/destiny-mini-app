@@ -1,1 +1,113 @@
+<!DOCTYPE html><html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>СУДЬБА</title><style>
+* {
+    box-sizing: border-box;
+}
 
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 50% 35%, #24163d 0%, #0d0a15 45%, #050508 100%);
+    color: #ffffff;
+    font-family: Georgia, "Times New Roman", serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.start {
+    width: 100%;
+    max-width: 520px;
+    min-height: 100vh;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.symbol {
+    font-size: 64px;
+    margin-bottom: 18px;
+    opacity: 0.9;
+    animation: float 4s ease-in-out infinite;
+}
+
+h1 {
+    margin: 0;
+    font-size: 52px;
+    letter-spacing: 10px;
+    font-weight: 400;
+}
+
+.subtitle {
+    margin-top: 22px;
+    max-width: 380px;
+    color: #cfc6dc;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.start-button {
+    margin-top: 42px;
+    padding: 17px 34px;
+    border: 1px solid #8f78ad;
+    border-radius: 12px;
+    background: rgba(120, 80, 160, 0.18);
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 17px;
+    cursor: pointer;
+}
+
+.start-button:active {
+    transform: scale(0.97);
+}
+
+.note {
+    margin-top: 18px;
+    color: #777080;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+</style></head><body><div class="start"><div class="symbol">☯</div>
+
+<h1>СУДЬБА</h1>
+
+<div class="subtitle">
+    Небеса уже сделали свой выбор.<br>
+    Осталось узнать — какой.
+</div>
+
+<button class="start-button">
+    ✦ Узнать свою судьбу
+</button>
+
+<div class="note">
+    5 вопросов · 1 судьба
+</div>
+
+</div></body>
+</html>
