@@ -50,35 +50,6 @@ button {
 
 
 /* =========================
-   INCOMING CHALLENGE
-========================= */
-
-function loadChallenge() {
-
-    const params = new URLSearchParams(window.location.search);
-    const challengedBy = params.get("challenge");
-
-    if (!challengedBy) return;
-
-    const rarity = params.get("rarity");
-    const path = params.get("path");
-
-    challengeText.textContent =
-        "Тебе бросили вызов: «" +
-        challengedBy +
-        "»" +
-        (rarity ? " · " + rarity : "") +
-        (path ? " · " + path : "") +
-        ". Сможешь получить судьбу сильнее?";
-
-    challengeBanner.classList.remove("hidden");
-
-}
-
-loadChallenge();
-
-
-/* =========================
    START
 ========================= */
 
@@ -188,6 +159,120 @@ loadChallenge();
     transform: scale(0.98);
 }
 
+
+/* =========================
+   VISUAL DESTINY PROFILE
+========================= */
+
+.profile-visual {
+    position: relative;
+    margin: 24px auto 4px;
+    width: 174px;
+    height: 174px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-aura {
+    position: absolute;
+    inset: 7px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(170, 120, 220, 0.22) 0%, rgba(90, 55, 130, 0.08) 48%, transparent 72%);
+    border: 1px solid rgba(190, 155, 220, 0.28);
+    box-shadow: 0 0 42px rgba(140, 90, 190, 0.22), inset 0 0 28px rgba(255,255,255,0.04);
+    animation: profilePulse 3.5s ease-in-out infinite;
+}
+
+.profile-ring {
+    position: absolute;
+    inset: 18px;
+    border-radius: 50%;
+    border: 1px solid rgba(205, 181, 225, 0.55);
+    transform: rotate(45deg);
+}
+
+.profile-ring::before,
+.profile-ring::after {
+    content: "";
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #d8c6e6;
+    box-shadow: 0 0 12px rgba(220, 195, 240, 0.75);
+}
+
+.profile-ring::before { top: -3px; left: 50%; }
+.profile-ring::after { bottom: -3px; right: 50%; }
+
+.profile-avatar {
+    position: relative;
+    z-index: 2;
+    width: 106px;
+    height: 106px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.18), rgba(35, 24, 48, 0.96) 58%);
+    border: 2px solid rgba(216, 198, 230, 0.72);
+    box-shadow: 0 0 28px rgba(145, 95, 190, 0.25), inset 0 0 22px rgba(255,255,255,0.06);
+    font-size: 55px;
+}
+
+.profile-label {
+    margin-top: 3px;
+    color: #887691;
+    font-family: Arial, sans-serif;
+    font-size: 9px;
+    letter-spacing: 3px;
+}
+
+.profile-rank {
+    margin-top: 7px;
+    color: #c9b7d5;
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+}
+
+.profile-power {
+    margin: 18px auto 0;
+    max-width: 330px;
+    text-align: left;
+}
+
+.profile-power-head {
+    display: flex;
+    justify-content: space-between;
+    color: #8d7b98;
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+}
+
+.profile-power-track {
+    height: 4px;
+    margin-top: 8px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.08);
+    overflow: hidden;
+}
+
+.profile-power-fill {
+    height: 100%;
+    width: 50%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #80609c, #d2b5e6);
+    box-shadow: 0 0 12px rgba(185, 140, 220, 0.45);
+    transition: width 0.8s ease;
+}
+
+@keyframes profilePulse {
+    0%, 100% { transform: scale(1); opacity: 0.85; }
+    50% { transform: scale(1.035); opacity: 1; }
+}
 
 /* =========================
    RESULT CARD
@@ -572,10 +657,29 @@ class="screen hidden">
     <div class="destiny-card">
 
         <div class="card-top">
-            ТВОЯ СУДЬБА
+            ТВОЙ ВИЗУАЛЬНЫЙ ПРОФИЛЬ
         </div>
 
-        <div id="resultSymbol" class="result-symbol">
+        <div class="profile-visual">
+            <div class="profile-aura"></div>
+            <div class="profile-ring"></div>
+            <div id="profileAvatar" class="profile-avatar">☯</div>
+        </div>
+
+        <div id="profileLabel" class="profile-label">ПРОБУЖДЁННАЯ СУДЬБА</div>
+        <div id="profileRank" class="profile-rank"></div>
+
+        <div class="profile-power">
+            <div class="profile-power-head">
+                <span>ВЕС СУДЬБЫ</span>
+                <span id="profilePowerText">50%</span>
+            </div>
+            <div class="profile-power-track">
+                <div id="profilePowerFill" class="profile-power-fill"></div>
+            </div>
+        </div>
+
+        <div class="result-symbol hidden" id="resultSymbol">
             ☯
         </div>
 
@@ -857,6 +961,7 @@ const paths = [
 ========================= */
 
 let currentQuestion = 0;
+let currentDestinyIndex = -1;
 
 let selectedAnswers = [];
 
@@ -918,6 +1023,18 @@ const answers =
 
 const resultSymbol =
     document.getElementById("resultSymbol");
+
+const profileAvatar =
+    document.getElementById("profileAvatar");
+
+const profileRank =
+    document.getElementById("profileRank");
+
+const profilePowerText =
+    document.getElementById("profilePowerText");
+
+const profilePowerFill =
+    document.getElementById("profilePowerFill");
 
 const resultTitle =
     document.getElementById("resultTitle");
@@ -1293,10 +1410,22 @@ function getDestiny() {
 function showResult() {
 
     const destiny = getDestiny();
-
+    currentDestinyIndex = destinies.indexOf(destiny);
 
     resultSymbol.textContent =
         destiny.symbol;
+
+    profileAvatar.textContent = destiny.symbol;
+
+    const rarityPower = destiny.rarity.indexOf("Мифическая") !== -1
+        ? 100
+        : destiny.rarity.indexOf("Эпическая") !== -1
+            ? 72
+            : 45;
+
+    profileRank.textContent = destiny.rarity.replace(/^[^А-ЯЁ]+/u, "").toUpperCase();
+    profilePowerText.textContent = rarityPower + "%";
+    profilePowerFill.style.width = rarityPower + "%";
 
     resultTitle.textContent =
         destiny.title;
@@ -1420,12 +1549,25 @@ function showQuestion() {
 function loadChallenge() {
 
     const params = new URLSearchParams(window.location.search);
-    const challengedBy = params.get("challenge");
+    const compactId = Number(params.get("c"));
+
+    let challengedBy = null;
+    let rarity = null;
+    let path = null;
+
+    if (Number.isInteger(compactId) && destinies[compactId]) {
+        const destiny = destinies[compactId];
+        challengedBy = destiny.title;
+        rarity = destiny.rarity;
+        path = destiny.path;
+    } else {
+        // Поддержка старых ссылок, чтобы уже отправленные вызовы не сломались.
+        challengedBy = params.get("challenge");
+        rarity = params.get("rarity");
+        path = params.get("path");
+    }
 
     if (!challengedBy) return;
-
-    const rarity = params.get("rarity");
-    const path = params.get("path");
 
     challengeText.textContent =
         "Тебе бросили вызов: «" +
@@ -1641,17 +1783,17 @@ async function shareDestiny() {
 
 async function challengeFriend() {
 
-    const params = new URLSearchParams();
-
-    params.set("challenge", resultTitle.textContent);
-    params.set("rarity", resultRarity.textContent);
-    params.set("path", resultPath.textContent.replace("Путь: ", ""));
+    const destinyId = currentDestinyIndex >= 0
+        ? currentDestinyIndex
+        : destinies.findIndex(function(destiny) {
+            return destiny.title === resultTitle.textContent;
+        });
 
     const challengeUrl =
         window.location.origin +
         window.location.pathname +
-        "?" +
-        params.toString();
+        "?c=" +
+        encodeURIComponent(destinyId);
 
     await openShare(
         "Мне выпала судьба «" +
