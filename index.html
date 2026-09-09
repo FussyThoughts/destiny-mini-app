@@ -222,26 +222,57 @@ button {
 }
 
 .profile-stats {
-    margin: 20px auto 0;
-    max-width: 330px;
-    padding: 12px 14px;
-    border: 1px solid rgba(190,155,220,.16);
-    border-radius: 14px;
-    background: rgba(255,255,255,.025);
+    margin: 24px auto 0;
+    max-width: 430px;
+    padding: 20px 19px;
+    border: 1px solid rgba(190,155,220,.24);
+    border-radius: 18px;
+    background: rgba(255,255,255,.035);
+    box-shadow: inset 0 0 25px rgba(255,255,255,.018);
+}
+.profile-stats-title {
+    margin-bottom: 15px;
+    color: #8f7aa0;
+    font: 11px Arial, sans-serif;
+    letter-spacing: 3px;
+    text-align: center;
 }
 .stat-row {
     display: grid;
-    grid-template-columns: 82px 1fr 22px;
+    grid-template-columns: 104px 1fr 30px;
     align-items: center;
-    gap: 8px;
-    margin: 8px 0;
-    color: #b8a8c1;
-    font: 10px Arial, sans-serif;
-    letter-spacing: .7px;
+    gap: 11px;
+    margin: 14px 0;
+    color: #ded5e4;
+    font: 14px Arial, sans-serif;
+    letter-spacing: .5px;
 }
-.stat-row b { color: #e0d2e7; font-size: 10px; text-align: right; }
-.stat-track { height: 5px; overflow: hidden; border-radius: 99px; background: rgba(255,255,255,.08); }
-.stat-fill { width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #806099, #d7c0e5); transition: width .8s ease; }
+.stat-row b { font-size: 14px; text-align: right; }
+.stat-track { height: 9px; overflow: hidden; border-radius: 99px; background: rgba(255,255,255,.09); }
+.stat-fill { width: 0; height: 100%; border-radius: inherit; transition: width .8s ease; }
+.stat-strength .stat-fill { background: linear-gradient(90deg,#9b2f35,#ff6670); box-shadow:0 0 10px rgba(255,80,90,.35); }
+.stat-will .stat-fill { background: linear-gradient(90deg,#7b4bc1,#c58cff); box-shadow:0 0 10px rgba(180,110,255,.35); }
+.stat-loyalty .stat-fill { background: linear-gradient(90deg,#b56b30,#ffb45c); box-shadow:0 0 10px rgba(255,170,80,.35); }
+.stat-rebellion .stat-fill { background: linear-gradient(90deg,#257a9b,#65d9ff); box-shadow:0 0 10px rgba(70,210,255,.35); }
+.stat-strength b { color:#ff6670; }
+.stat-will b { color:#c58cff; }
+.stat-loyalty b { color:#ffb45c; }
+.stat-rebellion b { color:#65d9ff; }
+
+.character-panel {
+    margin: 25px auto 0;
+    max-width: 430px;
+    padding: 22px 19px;
+    border: 1px solid rgba(205,181,225,.28);
+    border-radius: 19px;
+    background: linear-gradient(145deg,rgba(125,83,165,.13),rgba(255,255,255,.025));
+}
+.character-kicker { color:#8f7aa0; font:10px Arial,sans-serif; letter-spacing:3px; text-align:center; }
+.character-name { margin-top:8px; font-size:25px; line-height:1.25; }
+.character-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:18px; }
+.character-item { padding:12px; border-radius:12px; background:rgba(255,255,255,.035); border:1px solid rgba(255,255,255,.07); text-align:left; }
+.character-item span { display:block; color:#796b80; font:9px Arial,sans-serif; letter-spacing:1.5px; }
+.character-item strong { display:block; margin-top:5px; color:#e7deec; font-size:14px; font-weight:500; }
 
 .profile-label {
     margin-top: 3px;
@@ -702,10 +733,22 @@ class="screen hidden">
         </div>
 
         <div class="profile-stats" id="profileStats">
-            <div class="stat-row"><span>Сила</span><div class="stat-track"><div id="statStrength" class="stat-fill"></div></div><b id="statStrengthText">0</b></div>
-            <div class="stat-row"><span>Воля</span><div class="stat-track"><div id="statWill" class="stat-fill"></div></div><b id="statWillText">0</b></div>
-            <div class="stat-row"><span>Верность</span><div class="stat-track"><div id="statLoyalty" class="stat-fill"></div></div><b id="statLoyaltyText">0</b></div>
-            <div class="stat-row"><span>Непокорность</span><div class="stat-track"><div id="statRebellion" class="stat-fill"></div></div><b id="statRebellionText">0</b></div>
+            <div class="profile-stats-title">ХАРАКТЕРИСТИКИ</div>
+            <div class="stat-row stat-strength"><span>Сила</span><div class="stat-track"><div id="statStrength" class="stat-fill"></div></div><b id="statStrengthText">0</b></div>
+            <div class="stat-row stat-will"><span>Воля</span><div class="stat-track"><div id="statWill" class="stat-fill"></div></div><b id="statWillText">0</b></div>
+            <div class="stat-row stat-loyalty"><span>Верность</span><div class="stat-track"><div id="statLoyalty" class="stat-fill"></div></div><b id="statLoyaltyText">0</b></div>
+            <div class="stat-row stat-rebellion"><span>Непокорность</span><div class="stat-track"><div id="statRebellion" class="stat-fill"></div></div><b id="statRebellionText">0</b></div>
+        </div>
+
+        <div class="character-panel">
+            <div class="character-kicker">АРХЕТИП ПЕРСОНАЖА</div>
+            <div id="characterName" class="character-name">Пробуждённый странник</div>
+            <div class="character-grid">
+                <div class="character-item"><span>РОЛЬ</span><strong id="characterRole">Воин</strong></div>
+                <div class="character-item"><span>ОРУЖИЕ</span><strong id="characterWeapon">Меч</strong></div>
+                <div class="character-item"><span>АУРА</span><strong id="characterAura">Небесная</strong></div>
+                <div class="character-item"><span>ТЕМПЕРАМЕНТ</span><strong id="characterTemper">Непокорный</strong></div>
+            </div>
         </div>
 
         <div class="result-symbol hidden" id="resultSymbol">
@@ -1073,6 +1116,11 @@ const statStrengthText = document.getElementById("statStrengthText");
 const statWillText = document.getElementById("statWillText");
 const statLoyaltyText = document.getElementById("statLoyaltyText");
 const statRebellionText = document.getElementById("statRebellionText");
+const characterName = document.getElementById("characterName");
+const characterRole = document.getElementById("characterRole");
+const characterWeapon = document.getElementById("characterWeapon");
+const characterAura = document.getElementById("characterAura");
+const characterTemper = document.getElementById("characterTemper");
 
 const resultTitle =
     document.getElementById("resultTitle");
@@ -1429,6 +1477,25 @@ function getDestiny() {
 }
 
 
+const characterProfiles = {
+    "Носитель Кровавого Клинка": ["Мститель", "Кровавый клинок", "Алая", "Неукротимый"],
+    "Последний Страж": ["Страж", "Щит и копьё", "Каменная", "Надёжный"],
+    "Пепельный Разрушитель": ["Разрушитель", "Пепельный клинок", "Пепельная", "Безжалостный"],
+    "Воин Небесного Предела": ["Воин", "Меч Небесного Предела", "Золотая", "Непреклонный"],
+    "Властелин Девяти Небес": ["Правитель", "Небесный жезл", "Золотая", "Властный"],
+    "Безмолвный Судья": ["Судья", "Весы Небес", "Серебряная", "Хладнокровный"],
+    "Кукловод Судеб": ["Стратег", "Нити Судьбы", "Фиолетовая", "Расчётливый"],
+    "Тот, Кто Сидит Над Небесами": ["Властелин", "Корона Небес", "Чёрно-золотая", "Абсолютный"],
+    "Хранитель Последнего Обета": ["Хранитель", "Клинок Обета", "Алая", "Верный"],
+    "Тот, Кто Вернул Утраченное": ["Искатель", "Фонарь Возвращения", "Янтарная", "Надеждный"],
+    "Связанный Красной Нитью": ["Связанный", "Красная нить", "Багровая", "Преданный"],
+    "Любящий Даже После Смерти": ["Хранитель памяти", "Клинок памяти", "Лунная", "Самоотверженный"],
+    "Странник За Пределами Небес": ["Странник", "Дорожный клинок", "Бирюзовая", "Независимый"],
+    "Искатель Третьего Пути": ["Искатель", "Зеркальный клинок", "Синяя", "Изобретательный"],
+    "Отступник Небесного Закона": ["Отступник", "Клинок запрета", "Синяя", "Бунтарский"],
+    "Тот, Кого Не Смогла Найти Судьба": ["Неизвестный", "Безымянный клинок", "Чёрная", "Непредсказуемый"]
+};
+
 /* =========================
    SHOW RESULT
 ========================= */
@@ -1471,6 +1538,13 @@ function showResult() {
     statWillText.textContent = profileValues.will;
     statLoyaltyText.textContent = profileValues.loyalty;
     statRebellionText.textContent = profileValues.rebellion;
+
+    const character = characterProfiles[destiny.title] || ["Странник", "Клинок", "Таинственная", "Неизвестный"];
+    characterName.textContent = destiny.title;
+    characterRole.textContent = character[0];
+    characterWeapon.textContent = character[1];
+    characterAura.textContent = character[2];
+    characterTemper.textContent = character[3];
 
     resultTitle.textContent =
         destiny.title;
