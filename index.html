@@ -15,26 +15,221 @@
       margin: 0;
       min-height: 100vh;
       background:
-        radial-gradient(circle at 50% 20%, #34245c 0%, #171329 35%, #080811 75%);
+        radial-gradient(circle at 50% 15%, #34245c 0%, #171329 38%, #080811 78%);
       color: #f5f1ff;
       font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
     }
 
     .app {
       width: 100%;
-      max-width: 520px;
+      max-width: 560px;
       min-height: 100vh;
-      padding: 32px 22px;
+      margin: 0 auto;
+      padding: 28px 20px;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      text-align: center;
     }
 
+    .header {
+      text-align: center;
+      margin-bottom: 34px;
+    }
+
+    .symbol {
+      font-size: 48px;
+      margin-bottom: 12px;
+      opacity: 0.9;
+    }
+
+    .title {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: 5px;
+      font-weight: 700;
+    }
+
+    .progress {
+      margin-top: 18px;
+      color: #77708d;
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+
+    .question {
+      font-size: 23px;
+      line-height: 1.45;
+      text-align: center;
+      margin: 0 auto 28px;
+      max-width: 480px;
+    }
+
+    .answers {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .answer {
+      width: 100%;
+      padding: 18px 18px;
+      border: 1px solid rgba(190, 160, 255, 0.16);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.055);
+      color: #f5f1ff;
+      font-size: 16px;
+      line-height: 1.45;
+      text-align: left;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .answer:hover {
+      background: rgba(150, 110, 230, 0.15);
+      border-color: rgba(190, 160, 255, 0.4);
+    }
+
+    .answer:active {
+      transform: scale(0.98);
+    }
+
+    .answer.selected {
+      background: rgba(130, 90, 220, 0.28);
+      border-color: rgba(210, 180, 255, 0.65);
+    }
+
+    .icon {
+      display: inline-block;
+      width: 30px;
+      font-size: 20px;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    .text {
+      vertical-align: middle;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.35s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-height: 650px) {
+      .app {
+        padding-top: 18px;
+        padding-bottom: 18px;
+      }
+
+      .header {
+        margin-bottom: 20px;
+      }
+
+      .question {
+        font-size: 20px;
+        margin-bottom: 20px;
+      }
+
+      .answer {
+        padding: 14px 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="app">
+
+    <header class="header">
+      <div class="symbol">☯</div>
+
+      <h1 class="title">СУДЬБА</h1>
+
+      <div class="progress">
+        ВОПРОС 1 ИЗ 5
+      </div>
+    </header>
+
+    <section id="questionScreen" class="fade-in">
+
+      <div class="question">
+        Ты станешь собой без капли сожаления, выбрав…
+      </div>
+
+      <div class="answers">
+
+        <button class="answer" onclick="chooseAnswer(0)">
+          <span class="icon">⚔️</span>
+          <span class="text">
+            Силу, с которой нельзя не считаться.
+          </span>
+        </button>
+
+        <button class="answer" onclick="chooseAnswer(1)">
+          <span class="icon">👑</span>
+          <span class="text">
+            Власть, устрашающую и благодетельную.
+          </span>
+        </button>
+
+        <button class="answer" onclick="chooseAnswer(2)">
+          <span class="icon">❤️</span>
+          <span class="text">
+            Любовь, от которой невозможно отказаться.
+          </span>
+        </button>
+
+        <button class="answer" onclick="chooseAnswer(3)">
+          <span class="icon">🕊️</span>
+          <span class="text">
+            Свободу в каждом вдохе.
+          </span>
+        </button>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <script>
+
+    const answers = [];
+
+    function chooseAnswer(answerIndex) {
+
+      answers.push(answerIndex);
+
+      const buttons = document.querySelectorAll(".answer");
+
+      buttons[answerIndex].classList.add("selected");
+
+      setTimeout(() => {
+
+        alert(
+          "Выбор принят.\n\n" +
+          "Твоя судьба начинает пробуждаться..."
+        );
+
+      }, 250);
+    }
+
+  </script>
+
+</body>
+</html>
     .symbol {
       font-size: 64px;
       margin-bottom: 20px;
