@@ -1279,6 +1279,36 @@ function restartQuiz() {
 
 
 /* =========================
+   SHARE
+========================= */
+
+function shareDestiny() {
+
+    const text =
+        "Моя судьба — " +
+        resultTitle.textContent +
+        "\n\n" +
+        "Узнай свою судьбу: " +
+        window.location.href;
+
+    if (navigator.share) {
+
+        navigator.share({
+            title: "Моя судьба",
+            text: text
+        });
+
+    } else {
+
+        navigator.clipboard.writeText(text);
+
+        alert("Судьба скопирована. Отправь её другу.");
+
+    }
+}
+
+
+/* =========================
    BUTTONS
 ========================= */
 
@@ -1292,6 +1322,12 @@ restartButton.addEventListener(
     restartQuiz
 );
 
+const shareButton = document.getElementById("shareBtn");
+
+shareButton.addEventListener(
+    "click",
+    shareDestiny
+);
 </script>
 
 </body>
