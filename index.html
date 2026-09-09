@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#100c18">
 <title>СУДЬБА</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
 * {
@@ -258,6 +260,34 @@ button {
     line-height: 1.5;
 }
 
+.share-button {
+    width: 100%;
+    margin-top: 23px;
+    padding: 16px 28px;
+    border: 1px solid #9279ad;
+    border-radius: 12px;
+    background: rgba(120, 80, 160, 0.18);
+    color: #ffffff;
+    font-size: 15px;
+    cursor: pointer;
+    touch-action: manipulation;
+    transition: 0.2s ease;
+}
+
+.share-button:hover {
+    background: rgba(140, 100, 180, 0.28);
+    border-color: #a48abb;
+}
+
+.share-button:active {
+    transform: scale(0.98);
+}
+
+.share-button:disabled {
+    opacity: 0.65;
+    cursor: default;
+}
+
 .restart-button {
     margin-top: 23px;
     padding: 14px 28px;
@@ -466,6 +496,14 @@ class="screen hidden">
         </div>
 
     </div>
+
+    <button
+        id="shareBtn"
+        class="share-button"
+        type="button"
+    >
+        ✦ Поделиться судьбой
+    </button>
 
     <button
         id="restartButton"
@@ -1279,32 +1317,188 @@ function restartQuiz() {
 
 
 /* =========================
+   TELEGRAM
+========================= */
+
+const tg =
+    window.Telegram &&
+    window.Telegram.WebApp
+        ? window.Telegram.WebApp
+        : null;
+
+if (tg) {
+
+    try {
+        tg.ready();
+        tg.expand();
+
+        if (tg.setHeaderColor) {
+            tg.setHeaderColor("#100c18");
+        }
+
+        if (tg.setBackgroundColor) {
+            tg.setBackgroundColor("#100c18");
+        }
+    } catch (error) {
+        console.warn("Telegram WebApp init:", error);
+    }
+
+}
+
+
+/* =========================
    SHARE
 ========================= */
 
-function shareDestiny() {
+function getShareText() {
 
-    const text =
+    return (
         "Моя судьба — " +
         resultTitle.textContent +
         "\n\n" +
         "Узнай свою судьбу: " +
-        window.location.href;
+        window.location.href
+    );
 
-    if (navigator.share) {
+}
 
-        navigator.share({
-            title: "Моя судьба",
-            text: text
-        });
 
-    } else {
+function haptic() {
 
-        navigator.clipboard.writeText(text);
+    if (
+        tg &&
+        tg.HapticFeedback &&
+        tg.HapticFeedback.impactOccurred
+    ) {
 
-        alert("Судьба скопирована. Отправь её другу.");
+        try {
+            tg.HapticFeedback.impactOccurred("light");
+        } catch (error) {
+            console.warn("Haptic feedback:", error);
+        }
 
     }
+
+}
+
+
+async function shareDestiny() {
+
+    const text = getShareText();
+    const url = window.location.href;
+
+    haptic();
+
+    /*
+     * В Telegram сначала используем официальный share URL.
+     * Он открывает выбор чата/канала для отправки результата.
+     */
+    if (tg) {
+
+        const telegramShareUrl =
+            "https://t.me/share/url?url=" +
+            encodeURIComponent(url) +
+            "&text=" +
+            encodeURIComponent(
+                "Моя судьба — " +
+                resultTitle.textContent +
+                "\n\nУзнай свою судьбу:"
+            );
+
+        try {
+
+            if (tg.openTelegramLink) {
+                tg.openTelegramLink(telegramShareUrl);
+            } else {
+                window.location.href = telegramShareUrl;
+            }
+
+            return;
+
+        } catch (error) {
+
+            console.warn(
+                "Telegram share:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /*
+     * В обычном браузере используем системное меню "Поделиться".
+     */
+    if (
+        navigator.share &&
+        typeof navigator.share === "function"
+    ) {
+
+        try {
+
+            await navigator.share({
+                title: "Моя судьба",
+                text: text,
+                url: url
+            });
+
+            return;
+
+        } catch (error) {
+
+            /*
+             * AbortError означает, что пользователь
+             * просто закрыл меню. Ничего делать не нужно.
+             */
+            if (error && error.name === "AbortError") {
+                return;
+            }
+
+        }
+
+    }
+
+
+    /*
+     * Резервный вариант: копируем текст.
+     */
+    try {
+
+        if (
+            navigator.clipboard &&
+            navigator.clipboard.writeText
+        ) {
+
+            await navigator.clipboard.writeText(text);
+
+            alert(
+                "Судьба скопирована.\n\n" +
+                "Отправь её другу."
+            );
+
+            return;
+
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Clipboard:",
+            error
+        );
+
+    }
+
+
+    /*
+     * Последний резервный вариант для старых браузеров.
+     */
+    window.prompt(
+        "Скопируй свою судьбу:",
+        text
+    );
+
 }
 
 
@@ -1314,20 +1508,38 @@ function shareDestiny() {
 
 startButton.addEventListener(
     "click",
-    startQuiz
+    function() {
+
+        haptic();
+        startQuiz();
+
+    }
 );
+
 
 restartButton.addEventListener(
     "click",
-    restartQuiz
+    function() {
+
+        haptic();
+        restartQuiz();
+
+    }
 );
 
-const shareButton = document.getElementById("shareBtn");
 
-shareButton.addEventListener(
-    "click",
-    shareDestiny
-);
+const shareButton =
+    document.getElementById("shareBtn");
+
+
+if (shareButton) {
+
+    shareButton.addEventListener(
+        "click",
+        shareDestiny
+    );
+
+}
 </script>
 
 </body>
