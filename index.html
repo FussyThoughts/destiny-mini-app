@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Судьба</title>
 
   <style>
@@ -14,306 +13,102 @@
     body {
       margin: 0;
       min-height: 100vh;
-      background:
-        radial-gradient(circle at 50% 15%, #34245c 0%, #171329 38%, #080811 78%);
-      color: #f5f1ff;
+      background: #0b0912;
+      color: white;
       font-family: Arial, sans-serif;
     }
 
     .app {
-      width: 100%;
-      max-width: 560px;
-      min-height: 100vh;
-      margin: 0 auto;
-      padding: 28px 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .header {
+      max-width: 520px;
+      margin: auto;
+      padding: 30px 20px;
       text-align: center;
-      margin-bottom: 34px;
     }
 
     .symbol {
-      font-size: 48px;
-      margin-bottom: 12px;
-      opacity: 0.9;
+      font-size: 50px;
+      margin-top: 30px;
     }
 
-    .title {
-      margin: 0;
-      font-size: 28px;
+    h1 {
+      font-size: 32px;
       letter-spacing: 5px;
-      font-weight: 700;
+      margin: 15px 0 10px;
     }
 
     .progress {
-      margin-top: 18px;
-      color: #77708d;
-      font-size: 12px;
-      letter-spacing: 2px;
+      color: #777080;
+      font-size: 13px;
+      margin-bottom: 40px;
     }
 
     .question {
       font-size: 23px;
-      line-height: 1.45;
-      text-align: center;
-      margin: 0 auto 28px;
-      max-width: 480px;
+      line-height: 1.5;
+      margin-bottom: 30px;
     }
 
     .answers {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
     }
 
     .answer {
       width: 100%;
-      padding: 18px 18px;
-      border: 1px solid rgba(190, 160, 255, 0.16);
+      padding: 18px;
       border-radius: 16px;
-      background: rgba(255, 255, 255, 0.055);
-      color: #f5f1ff;
+      border: 1px solid #403750;
+      background: #181522;
+      color: white;
       font-size: 16px;
-      line-height: 1.45;
+      line-height: 1.5;
       text-align: left;
-      cursor: pointer;
-      transition: 0.2s ease;
-    }
-
-    .answer:hover {
-      background: rgba(150, 110, 230, 0.15);
-      border-color: rgba(190, 160, 255, 0.4);
     }
 
     .answer:active {
-      transform: scale(0.98);
-    }
-
-    .answer.selected {
-      background: rgba(130, 90, 220, 0.28);
-      border-color: rgba(210, 180, 255, 0.65);
-    }
-
-    .icon {
-      display: inline-block;
-      width: 30px;
-      font-size: 20px;
-      vertical-align: middle;
-      margin-right: 6px;
-    }
-
-    .text {
-      vertical-align: middle;
-    }
-
-    .fade-in {
-      animation: fadeIn 0.35s ease;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @media (max-height: 650px) {
-      .app {
-        padding-top: 18px;
-        padding-bottom: 18px;
-      }
-
-      .header {
-        margin-bottom: 20px;
-      }
-
-      .question {
-        font-size: 20px;
-        margin-bottom: 20px;
-      }
-
-      .answer {
-        padding: 14px 16px;
-      }
+      background: #30234a;
     }
   </style>
 </head>
 
 <body>
 
-  <main class="app">
-
-    <header class="header">
-      <div class="symbol">☯</div>
-
-      <h1 class="title">СУДЬБА</h1>
-
-      <div class="progress">
-        ВОПРОС 1 ИЗ 5
-      </div>
-    </header>
-
-    <section id="questionScreen" class="fade-in">
-
-      <div class="question">
-        Ты станешь собой без капли сожаления, выбрав…
-      </div>
-
-      <div class="answers">
-
-        <button class="answer" onclick="chooseAnswer(0)">
-          <span class="icon">⚔️</span>
-          <span class="text">
-            Силу, с которой нельзя не считаться.
-          </span>
-        </button>
-
-        <button class="answer" onclick="chooseAnswer(1)">
-          <span class="icon">👑</span>
-          <span class="text">
-            Власть, устрашающую и благодетельную.
-          </span>
-        </button>
-
-        <button class="answer" onclick="chooseAnswer(2)">
-          <span class="icon">❤️</span>
-          <span class="text">
-            Любовь, от которой невозможно отказаться.
-          </span>
-        </button>
-
-        <button class="answer" onclick="chooseAnswer(3)">
-          <span class="icon">🕊️</span>
-          <span class="text">
-            Свободу в каждом вдохе.
-          </span>
-        </button>
-
-      </div>
-
-    </section>
-
-  </main>
-
-  <script>
-
-    const answers = [];
-
-    function chooseAnswer(answerIndex) {
-
-      answers.push(answerIndex);
-
-      const buttons = document.querySelectorAll(".answer");
-
-      buttons[answerIndex].classList.add("selected");
-
-      setTimeout(() => {
-
-        alert(
-          "Выбор принят.\n\n" +
-          "Твоя судьба начинает пробуждаться..."
-        );
-
-      }, 250);
-    }
-
-  </script>
-
-</body>
-</html>
-    .symbol {
-      font-size: 64px;
-      margin-bottom: 20px;
-      filter: drop-shadow(0 0 18px rgba(190, 150, 255, 0.45));
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 42px;
-      letter-spacing: 4px;
-    }
-
-    .subtitle {
-      margin-top: 16px;
-      color: #c7bfd9;
-      font-size: 18px;
-      line-height: 1.5;
-    }
-
-    .description {
-      margin: 28px 0;
-      color: #9188a8;
-      font-size: 15px;
-      line-height: 1.6;
-    }
-
-    button {
-      border: none;
-      border-radius: 16px;
-      padding: 17px 24px;
-      font-size: 17px;
-      font-weight: bold;
-      color: white;
-      background: linear-gradient(135deg, #7655d6, #a06be8);
-      box-shadow: 0 8px 30px rgba(118, 85, 214, 0.35);
-      cursor: pointer;
-    }
-
-    button:active {
-      transform: scale(0.97);
-    }
-
-    .version {
-      margin-top: 28px;
-      color: #625a76;
-      font-size: 12px;
-    }
-  </style>
-</head>
-
-<body>
-
-  <main class="app">
+  <div class="app">
 
     <div class="symbol">☯</div>
 
     <h1>СУДЬБА</h1>
 
-    <div class="subtitle">
-      Кем ты был бы<br>
-      в мире культивации?
+    <div class="progress">
+      ВОПРОС 1 ИЗ 5
     </div>
 
-    <div class="description">
-      Пять решений определят твой путь,
-      талант, судьбу и место среди тех,
-      кто ступил на путь бессмертия.
+    <div class="question">
+      Ты станешь собой без капли сожаления, выбрав…
     </div>
 
-    <button onclick="startDestiny()">
-      УЗНАТЬ СВОЮ СУДЬБУ
-    </button>
+    <div class="answers">
 
-    <div class="version">
-      Версия 0.1
+      <button class="answer">
+        ⚔️ Силу, с которой нельзя не считаться.
+      </button>
+
+      <button class="answer">
+        👑 Власть, устрашающую и благодетельную.
+      </button>
+
+      <button class="answer">
+        ❤️ Любовь, от которой невозможно отказаться.
+      </button>
+
+      <button class="answer">
+        🕊️ Свободу в каждом вдохе.
+      </button>
+
     </div>
 
-  </main>
-
-  <script>
-    function startDestiny() {
-      alert("Судьба пробудилась...");
-    }
-  </script>
+  </div>
 
 </body>
 </html>
