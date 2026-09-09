@@ -35,19 +35,19 @@
 
     .symbol {
       font-size: 50px;
-      margin-bottom: 10px;
+      margin-top: 20px;
     }
 
     h1 {
       font-size: 32px;
       letter-spacing: 5px;
-      margin: 0 0 12px;
+      margin: 15px 0 10px;
     }
 
     .progress {
       color: #777080;
       font-size: 13px;
-      margin-bottom: 42px;
+      margin-bottom: 40px;
     }
 
     .question {
@@ -74,21 +74,26 @@
       line-height: 1.5;
       text-align: left;
       cursor: pointer;
+      transition: 0.25s;
     }
 
     .answer:active {
-      background: #30234a;
       transform: scale(0.98);
     }
 
+    .answer.selected {
+      background: #30234a;
+      border-color: #9b7ac7;
+    }
+
     .fade {
-      animation: fade 0.3s ease;
+      animation: fade 0.35s ease;
     }
 
     @keyframes fade {
       from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(12px);
       }
 
       to {
@@ -104,36 +109,29 @@
   <main class="app">
 
     <div class="header">
+
       <div class="symbol">☯</div>
 
       <h1>СУДЬБА</h1>
 
-      <div class="progress" id="progress">
+      <div id="progress" class="progress">
         ВОПРОС 1 ИЗ 5
       </div>
+
     </div>
 
-    <section id="questionScreen" class="fade"></section>
+    <section id="questionScreen" class="fade">
+
+      <div id="question" class="question"></div>
+
+      <div id="answers" class="answers"></div>
+
+    </section>
 
   </main>
 
 
   <script>
-
-    /*
-      Здесь будут храниться ответы пользователя.
-
-      Позже они будут влиять на:
-      - путь культивации
-      - талант
-      - характер
-      - оружие
-      - редкость
-      - судьбу
-    */
-
-    const userAnswers = [];
-
 
     const questions = [
 
@@ -149,46 +147,13 @@
       },
 
       {
-        text: "Твой близкий человек предал тебя. Что ты сделаешь?",
+        text: "Тот, кому ты доверял больше всего, предал тебя. Что ты сделаешь?",
 
         answers: [
-          "⚔️ Отомщу. Предательство должно иметь цену.",
-          "🚶 Уйду. Некоторые люди должны остаться в прошлом.",
-          "❤️ Попытаюсь понять причину.",
-          "🔥 Сожгу всё, что связывало нас."
-        ]
-      },
-
-      {
-        text: "Перед тобой путь к бессмертию. Его цена — жизнь незнакомца.",
-
-        answers: [
-          "🩸 Заплачу цену. Я выбрал свой путь.",
-          "🚫 Откажусь. Чужая жизнь не стоит моего бессмертия.",
-          "🎲 Найду третий путь.",
-          "🤐 Сначала узнаю, кто этот человек."
-        ]
-      },
-
-      {
-        text: "Что страшнее всего потерять?",
-
-        answers: [
-          "🪞 Себя.",
-          "🏯 Семью.",
-          "🕊️ Свободу.",
-          "🌑 Смысл."
-        ]
-      },
-
-      {
-        text: "Ты получил силу, которой больше никто не обладает.",
-
-        answers: [
-          "🤫 Спрячу её.",
-          "❤️ Использую ради близких.",
-          "👑 Подчиню мир.",
-          "🔮 Попытаюсь понять её природу."
+          "⚔️ Отомщу, чтобы он никогда не забыл.",
+          "🚶 Уйду. Некоторые связи должны умереть.",
+          "❤️ Попытаюсь понять причину его поступка.",
+          "🔥 Сотру прошлое и начну всё заново."
         ]
       }
 
@@ -197,95 +162,73 @@
 
     let currentQuestion = 0;
 
+    const chosenAnswers = [];
+
 
     function showQuestion() {
 
       const question = questions[currentQuestion];
 
       document.getElementById("progress").textContent =
-        "ВОПРОС " + (currentQuestion + 1) + " ИЗ " + questions.length;
+        "ВОПРОС " + (currentQuestion + 1) + " ИЗ 5";
 
+      document.getElementById("question").textContent =
+        question.text;
 
-      const screen = document.getElementById("questionScreen");
+      const answersContainer =
+        document.getElementById("answers");
 
-      screen.className = "fade";
+      answersContainer.innerHTML = "";
 
-      screen.innerHTML = `
+      question.answers.forEach((answer, index) => {
 
-        <div class="question">
-          ${question.text}
-        </div>
+        const button = document.createElement("button");
 
-        <div class="answers">
+        button.className = "answer";
 
-          ${question.answers.map((answer, index) => `
+        button.textContent = answer;
 
-            <button
-              class="answer"
-              onclick="chooseAnswer(${index})">
+        button.onclick = () => chooseAnswer(index, button);
 
-              ${answer}
+        answersContainer.appendChild(button);
 
-            </button>
-
-          `).join("")}
-
-        </div>
-
-      `;
-
-    }
-
-
-    function chooseAnswer(answerIndex) {
-
-      userAnswers.push({
-        question: currentQuestion,
-        answer: answerIndex
       });
 
+      const screen =
+        document.getElementById("questionScreen");
 
-      currentQuestion++;
+      screen.classList.remove("fade");
 
+      void screen.offsetWidth;
 
-      if (currentQuestion < questions.length) {
-
-        showQuestion();
-
-      } else {
-
-        showResult();
-
-      }
-
+      screen.classList.add("fade");
     }
 
 
-    function showResult() {
+    function chooseAnswer(index, button) {
 
-      document.getElementById("progress").textContent =
-        "СУДЬБА ОПРЕДЕЛЕНА";
+      chosenAnswers[currentQuestion] = index;
 
+      button.classList.add("selected");
 
-      document.getElementById("questionScreen").innerHTML = `
+      setTimeout(() => {
 
-        <div class="question">
+        if (currentQuestion < questions.length - 1) {
 
-          <h2>Твоя судьба пробуждается…</h2>
+          currentQuestion++;
 
-          <p>
-            Ты сделал свой выбор.
-          </p>
+          showQuestion();
 
-          <p>
-            Скоро мы узнаем, кем ты стал.
-          </p>
+        } else {
 
-        </div>
+          alert(
+            "Первые ответы приняты.\n\n" +
+            "Судьба продолжает пробуждаться..."
+          );
 
-      `;
+        }
 
-      console.log("Ответы пользователя:", userAnswers);
+      }, 300);
 
     }
 
