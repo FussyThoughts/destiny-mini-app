@@ -221,6 +221,28 @@ button {
     font-size: 55px;
 }
 
+.profile-stats {
+    margin: 20px auto 0;
+    max-width: 330px;
+    padding: 12px 14px;
+    border: 1px solid rgba(190,155,220,.16);
+    border-radius: 14px;
+    background: rgba(255,255,255,.025);
+}
+.stat-row {
+    display: grid;
+    grid-template-columns: 82px 1fr 22px;
+    align-items: center;
+    gap: 8px;
+    margin: 8px 0;
+    color: #b8a8c1;
+    font: 10px Arial, sans-serif;
+    letter-spacing: .7px;
+}
+.stat-row b { color: #e0d2e7; font-size: 10px; text-align: right; }
+.stat-track { height: 5px; overflow: hidden; border-radius: 99px; background: rgba(255,255,255,.08); }
+.stat-fill { width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #806099, #d7c0e5); transition: width .8s ease; }
+
 .profile-label {
     margin-top: 3px;
     color: #887691;
@@ -679,6 +701,13 @@ class="screen hidden">
             </div>
         </div>
 
+        <div class="profile-stats" id="profileStats">
+            <div class="stat-row"><span>Сила</span><div class="stat-track"><div id="statStrength" class="stat-fill"></div></div><b id="statStrengthText">0</b></div>
+            <div class="stat-row"><span>Воля</span><div class="stat-track"><div id="statWill" class="stat-fill"></div></div><b id="statWillText">0</b></div>
+            <div class="stat-row"><span>Верность</span><div class="stat-track"><div id="statLoyalty" class="stat-fill"></div></div><b id="statLoyaltyText">0</b></div>
+            <div class="stat-row"><span>Непокорность</span><div class="stat-track"><div id="statRebellion" class="stat-fill"></div></div><b id="statRebellionText">0</b></div>
+        </div>
+
         <div class="result-symbol hidden" id="resultSymbol">
             ☯
         </div>
@@ -1035,6 +1064,15 @@ const profilePowerText =
 
 const profilePowerFill =
     document.getElementById("profilePowerFill");
+
+const statStrength = document.getElementById("statStrength");
+const statWill = document.getElementById("statWill");
+const statLoyalty = document.getElementById("statLoyalty");
+const statRebellion = document.getElementById("statRebellion");
+const statStrengthText = document.getElementById("statStrengthText");
+const statWillText = document.getElementById("statWillText");
+const statLoyaltyText = document.getElementById("statLoyaltyText");
+const statRebellionText = document.getElementById("statRebellionText");
 
 const resultTitle =
     document.getElementById("resultTitle");
@@ -1415,6 +1453,25 @@ function showResult() {
     profilePowerText.textContent = rarityPower + "%";
     profilePowerFill.style.width = rarityPower + "%";
 
+    const profileValues = {
+        strength: stats.strength,
+        will: stats.power + stats.strength,
+        loyalty: stats.loyalty + stats.sacrifice,
+        rebellion: stats.rebellion + stats.freedom
+    };
+
+    const maxProfile = Math.max(5, ...Object.values(profileValues));
+
+    statStrength.style.width = Math.round(profileValues.strength / maxProfile * 100) + "%";
+    statWill.style.width = Math.round(profileValues.will / maxProfile * 100) + "%";
+    statLoyalty.style.width = Math.round(profileValues.loyalty / maxProfile * 100) + "%";
+    statRebellion.style.width = Math.round(profileValues.rebellion / maxProfile * 100) + "%";
+
+    statStrengthText.textContent = profileValues.strength;
+    statWillText.textContent = profileValues.will;
+    statLoyaltyText.textContent = profileValues.loyalty;
+    statRebellionText.textContent = profileValues.rebellion;
+
     resultTitle.textContent =
         destiny.title;
 
@@ -1536,17 +1593,18 @@ function showQuestion() {
 
 function loadChallenge() {
 
-    const params = new URLSearchParams(window.location.search);
-    const compactId = Number(params.get("c"));
+    // По умолчанию баннер всегда скрыт.
+    // Он появляется только при специальной ссылке ?c=...
+    challengeBanner.classList.add("hidden");
+    challengeText.textContent = "";
 
-    /*
-       Вызов существует только в момент перехода по специальной ссылке.
-       После показа очищаем адресную строку, поэтому:
-       - главная страница никогда не показывает старый вызов;
-       - перезагрузка не повторяет вызов;
-       - обычная ссылка приложения остаётся чистой.
-    */
-    if (!Number.isInteger(compactId) || !destinies[compactId]) return;
+    const params = new URLSearchParams(window.location.search);
+    const rawId = params.get("c");
+    const compactId = rawId === null ? NaN : Number(rawId);
+
+    if (!Number.isInteger(compactId) || !destinies[compactId]) {
+        return;
+    }
 
     const destiny = destinies[compactId];
 
@@ -1557,14 +1615,15 @@ function loadChallenge() {
 
     challengeBanner.classList.remove("hidden");
 
+    // После чтения вызова очищаем URL.
+    // Перезагрузка страницы уже открывает обычную игру.
     window.history.replaceState(
         {},
         document.title,
-        window.location.pathname
+        window.location.origin + window.location.pathname
     );
 
 }
-
 loadChallenge();
 
 /* =========================
