@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="ru">
+<!DOCTYPE html><html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>СУДЬБА</title>
-
-<style>
+<title>СУДЬБА</title><style>
 * {
     box-sizing: border-box;
 }
@@ -118,17 +115,10 @@ button:active {
     text-align: center;
     margin-top: 10px;
 }
-</style>
-</head>
-
-<body>
-
-<div class="app">
+</style></head><body><div class="app">
     <h1>СУДЬБА</h1>
     <div id="quiz"></div>
-</div>
-
-<script>
+</div><script>
 
 const questions = [
 
@@ -137,19 +127,23 @@ const questions = [
         answers: [
             {
                 text: "⚔️ Силу, с которой нельзя не считаться.",
-                path: "Сила"
+                path: "Сила",
+                stats: { strength: 2, rebellion: 1 }
             },
             {
                 text: "👑 Власть, устрашающую и благодетельную.",
-                path: "Власть"
+                path: "Власть",
+                stats: { power: 2, loyalty: 1 }
             },
             {
                 text: "❤️ Любовь, от которой невозможно отказаться.",
-                path: "Любовь"
+                path: "Любовь",
+                stats: { love: 2, loyalty: 1 }
             },
             {
                 text: "🕊️ Свободу в каждом вдохе.",
-                path: "Свобода"
+                path: "Свобода",
+                stats: { freedom: 2, rebellion: 1 }
             }
         ]
     },
@@ -159,19 +153,23 @@ const questions = [
         answers: [
             {
                 text: "☠️ Раздашь угощения всем причастным. Пусть каждый получит то, что заслужил.",
-                path: "Сила"
+                path: "Сила",
+                stats: { cruelty: 2, strength: 1 }
             },
             {
                 text: "🌊 Станешь каплей в океане. Исчезнешь из их жизни, оставив всё в прошлом.",
-                path: "Свобода"
+                path: "Свобода",
+                stats: { freedom: 1, rebellion: 1 }
             },
             {
                 text: "🧹 Заменишь все тряпки в доме. Простишь. Даже если помнить придётся всегда.",
-                path: "Любовь"
+                path: "Любовь",
+                stats: { loyalty: 2, sacrifice: 1 }
             },
             {
                 text: "⚔️ Обнажишь зеркальный клинок. Ответишь им тем же — ни больше, ни меньше.",
-                path: "Власть"
+                path: "Власть",
+                stats: { power: 1, cruelty: 1, loyalty: 1 }
             }
         ]
     },
@@ -181,19 +179,23 @@ const questions = [
         answers: [
             {
                 text: "🩸 Пройдёшь сквозь врата. Чужая судьба — не моя цена.",
-                path: "Сила"
+                path: "Сила",
+                stats: { strength: 2, cruelty: 1 }
             },
             {
                 text: "🚪 Оставишь врата закрытыми. Есть вещи, ради которых не стоит становиться бессмертным.",
-                path: "Любовь"
+                path: "Любовь",
+                stats: { sacrifice: 2, loyalty: 1 }
             },
             {
                 text: "🌙 Искать третий путь. Если судьба поставила два выбора — значит, она что-то скрывает.",
-                path: "Свобода"
+                path: "Свобода",
+                stats: { rebellion: 2, freedom: 1 }
             },
             {
                 text: "👁️ Сначала посмотришь, кто стоит за вратами. Прежде чем сделать шаг, нужно увидеть всю картину.",
-                path: "Власть"
+                path: "Власть",
+                stats: { power: 1, rebellion: 1, loyalty: 1 }
             }
         ]
     },
@@ -203,19 +205,23 @@ const questions = [
         answers: [
             {
                 text: "🪞 Своё отражение. Я не позволю себе стать кем-то другим.",
-                path: "Свобода"
+                path: "Свобода",
+                stats: { freedom: 2, rebellion: 1 }
             },
             {
                 text: "🏯 Тех, кого называю семьёй. Пусть рушатся Небеса — их я не отдам.",
-                path: "Любовь"
+                path: "Любовь",
+                stats: { loyalty: 2, sacrifice: 1 }
             },
             {
                 text: "🕊️ Свободу. Даже вечная жизнь не стоит одной цепи.",
-                path: "Свобода"
+                path: "Свобода",
+                stats: { freedom: 2, rebellion: 1 }
             },
             {
                 text: "🌑 Смысл. Если исчезнет он — зачем тогда мне всё остальное?",
-                path: "Власть"
+                path: "Власть",
+                stats: { power: 1, strength: 1, rebellion: 1 }
             }
         ]
     },
@@ -225,19 +231,23 @@ const questions = [
         answers: [
             {
                 text: "🌫️ Спрячешь её. Самая опасная сила — та, о которой знают все.",
-                path: "Свобода"
+                path: "Свобода",
+                stats: { freedom: 1, loyalty: 1, power: 1 }
             },
             {
                 text: "❤️ Отдашь её тем, кто тебе дорог. Если сила ничего не меняет для близких — зачем она нужна?",
-                path: "Любовь"
+                path: "Любовь",
+                stats: { sacrifice: 2, loyalty: 1 }
             },
             {
                 text: "👑 Поставишь мир на колени. Тот, кто получил силу, должен решить, как ею распорядиться.",
-                path: "Власть"
+                path: "Власть",
+                stats: { power: 2, rebellion: 1 }
             },
             {
                 text: "🔮 Попытаешься понять её. Прежде чем использовать силу, я хочу узнать, почему она выбрала меня.",
-                path: "Сила"
+                path: "Сила",
+                stats: { strength: 1, power: 1, loyalty: 1 }
             }
         ]
     }
@@ -245,6 +255,7 @@ const questions = [
 ];
 
 let currentQuestion = 0;
+
 let scores = {
     "Сила": 0,
     "Власть": 0,
@@ -252,7 +263,19 @@ let scores = {
     "Свобода": 0
 };
 
+let stats = {
+    strength: 0,
+    power: 0,
+    love: 0,
+    freedom: 0,
+    cruelty: 0,
+    loyalty: 0,
+    rebellion: 0,
+    sacrifice: 0
+};
+
 const quiz = document.getElementById("quiz");
+
 
 function showQuestion() {
 
@@ -283,6 +306,10 @@ function showQuestion() {
         button.addEventListener("click", function() {
 
             scores[answer.path]++;
+
+            for (let stat in answer.stats) {
+                stats[stat] += answer.stats[stat];
+            }
 
             currentQuestion++;
 
@@ -347,7 +374,7 @@ function showResult() {
 
 function getDestiny() {
 
-    let maxScore = 0;
+    let maxScore = -1;
     let selectedPath = "Сила";
 
     for (let path in scores) {
@@ -361,60 +388,196 @@ function getDestiny() {
 
     const destinies = {
 
-        "Сила": {
-            symbol: "⚔️",
-            name: "Носитель Кровавого Клинка",
-            rarity: "🔥 РЕДКАЯ СУДЬБА",
-            path: "Силы",
-            description:
-                "Ты не ищешь лёгких путей. " +
-                "Когда судьба закрывает перед тобой дверь, " +
-                "ты ищешь способ пробить стену. " +
-                "Но помни: сила способна защитить тебя от мира — " +
-                "и одновременно отдалить тебя от него."
-        },
+        "Сила": [
+            {
+                symbol: "⚔️",
+                name: "Носитель Кровавого Клинка",
+                rarity: "🔥 РЕДКАЯ СУДЬБА",
+                path: "Силы",
+                description:
+                    "Ты не забываешь нанесённых тебе ран. " +
+                    "Для тебя сила — это возможность самому решать, " +
+                    "где заканчивается чужая власть над тобой.",
+                score: stats.cruelty * 3 + stats.strength
+            },
+            {
+                symbol: "🛡️",
+                name: "Последний Страж",
+                rarity: "💎 ЭПИЧЕСКАЯ СУДЬБА",
+                path: "Силы",
+                description:
+                    "Ты способен принять удар, предназначенный другому. " +
+                    "Но однажды тебе придётся понять: даже стена не может защищать всех вечно.",
+                score: stats.sacrifice * 3 + stats.loyalty
+            },
+            {
+                symbol: "🔥",
+                name: "Пепельный Разрушитель",
+                rarity: "💎 ЭПИЧЕСКАЯ СУДЬБА",
+                path: "Силы",
+                description:
+                    "Тебе не нужна победа. Иногда тебе нужно, чтобы после тебя ничего не осталось.",
+                score: stats.cruelty * 2 + stats.rebellion * 2
+            },
+            {
+                symbol: "🌌",
+                name: "Воин Небесного Предела",
+                rarity: "🌑 МИФИЧЕСКАЯ СУДЬБА",
+                path: "Силы",
+                description:
+                    "Ты не хочешь быть сильнее остальных. " +
+                    "Ты хочешь однажды стать сильнее самого предела, " +
+                    "который Небеса назвали невозможным.",
+                score: stats.strength * 3 + stats.rebellion
+            }
+        ],
 
-        "Власть": {
-            symbol: "👑",
-            name: "Властелин Девяти Небес",
-            rarity: "👑 ЭПИЧЕСКАЯ СУДЬБА",
-            path: "Власти",
-            description:
-                "Ты способен смотреть на мир сверху, " +
-                "не позволяя обстоятельствам диктовать тебе путь. " +
-                "Ты понимаешь цену решений и не боишься её платить. " +
-                "Но чем выше поднимается человек, тем меньше вокруг него тех, " +
-                "кто осмелится сказать ему правду."
-        },
+        "Власть": [
+            {
+                symbol: "👑",
+                name: "Властелин Девяти Небес",
+                rarity: "🔥 РЕДКАЯ СУДЬБА",
+                path: "Власти",
+                description:
+                    "Ты умеешь заставлять мир двигаться в выбранном тобой направлении. " +
+                    "Но чем выше трон, тем дальше от тебя люди.",
+                score: stats.power * 3
+            },
+            {
+                symbol: "⚖️",
+                name: "Безмолвный Судья",
+                rarity: "💎 ЭПИЧЕСКАЯ СУДЬБА",
+                path: "Власти",
+                description:
+                    "Ты не спешишь карать. Ты сначала выслушиваешь всех — " +
+                    "а затем выносишь приговор, от которого никто не сможет скрыться.",
+                score: stats.loyalty * 2 + stats.strength + stats.cruelty
+            },
+            {
+                symbol: "🕸️",
+                name: "Кукловод Судеб",
+                rarity: "💎 ЭПИЧЕСКАЯ СУДЬБА",
+                path: "Власти",
+                description:
+                    "Пока остальные сражаются, ты двигаешь нити. " +
+                    "Побеждает не тот, кто наносит последний удар, " +
+                    "а тот, кто заранее решил, куда он будет нанесён.",
+                score: stats.power * 2 + stats.loyalty + stats.rebellion
+            },
+            {
+                symbol: "🌑",
+                name: "Тот, Кто Сидит Над Небесами",
+                rarity: "🌑 МИФИЧЕСКАЯ СУДЬБА",
+                path: "Власти",
+                description:
+                    "В какой-то момент тебе станет мало власти над людьми. " +
+                    "Ты поднимешь взгляд выше — туда, где Небеса сами считают себя властителями.",
+                score: stats.power * 3 + stats.rebellion * 2
+            }
+        ],
 
-        "Любовь": {
-            symbol: "❤️",
-            name: "Хранитель Последнего Обета",
-            rarity: "💎 ЛЕГЕНДАРНАЯ СУДЬБА",
-            path: "Любви",
-            description:
-                "Ты способен сохранить то, что другие давно сочли потерянным. " +
-                "Для тебя связь между людьми может оказаться сильнее смерти. " +
-                "Но однажды тебе придётся решить, " +
-                "сколько собственной судьбы ты готов отдать ради другого."
-        },
+        "Любовь": [
+            {
+                symbol: "❤️",
+                name: "Хранитель Последнего Обета",
+                rarity: "🔥 РЕДКАЯ СУДЬБА",
+                path: "Любви",
+                description:
+                    "Для тебя некоторые обещания сильнее смерти. " +
+                    "Даже если весь мир забудет — ты будешь помнить.",
+                score: stats.loyalty * 3
+            },
+            {
+                symbol: "🌅",
+                name: "Тот, Кто Вернул Утраченное",
+                rarity: "💎 ЭПИЧЕСКАЯ СУДЬБА",
+                path: "Любви",
+                description:
+                    "Ты не умеешь окончательно прощаться. " +
+                    "Там, где другие видят конец, ты продолжаешь искать путь обратно.",
+                score: stats.sacrifice * 2 + stats.loyalty
+            },
+            {
+                symbol: "🧵",
+                name: "Связанный Красной Нитью",
+                rarity: "💎 ЭПИЧЕСКАЯ СУДЬБА",
+                path: "Любви",
+                description:
+                    "Некоторые встречи случайны. Некоторые — нет. " +
+                    "И если Небеса попытаются разорвать твою связь с дорогим человеком, " +
+                    "ты бросишь им вызов.",
+                score: stats.love * 3 + stats.rebellion
+            },
+            {
+                symbol: "🌙",
+                name: "Любящий Даже После Смерти",
+                rarity: "🌑 МИФИЧЕСКАЯ СУДЬБА",
+                path: "Любви",
+                description:
+                    "Смерть может забрать человека. " +
+                    "Но она не всегда способна забрать то, " +
+                    "что он оставил в твоём сердце.",
+                score: stats.sacrifice * 3 + stats.love
+            }
+        ],
 
-        "Свобода": {
-            symbol: "🕊️",
-            name: "Странник За Пределами Небес",
-            rarity: "🌙 МИФИЧЕСКАЯ СУДЬБА",
-            path: "Свободы",
-            description:
-                "Ты не принадлежишь ни одному пути полностью. " +
-                "Когда мир предлагает тебе выбор между двумя дорогами, " +
-                "ты ищешь третью. " +
-                "Возможно, именно поэтому однажды ты окажешься там, " +
-                "куда ещё не ступала нога человека."
-        }
+        "Свобода": [
+            {
+                symbol: "🕊️",
+                name: "Странник За Пределами Небес",
+                rarity: "🔥 РЕДКАЯ СУДЬБА",
+                path: "Свободы",
+                description:
+                    "Ты не создан для клетки. Ни человек, ни секта, ни Небеса " +
+                    "не смогут навсегда указать тебе, куда идти.",
+                score: stats.freedom * 3
+            },
+            {
+                symbol: "🌙",
+                name: "Искатель Третьего Пути",
+                rarity: "💎 ЭПИЧЕСКАЯ СУДЬБА",
+                path: "Свободы",
+                description:
+                    "Когда тебе предлагают два выбора, ты ищешь третий. " +
+                    "Когда говорят, что выхода нет, ты начинаешь искать дверь.",
+                score: stats.rebellion * 3 + stats.freedom
+            },
+            {
+                symbol: "⚡",
+                name: "Отступник Небесного Закона",
+                rarity: "💎 ЭПИЧЕСКАЯ СУДЬБА",
+                path: "Свободы",
+                description:
+                    "Ты не принимаешь правила только потому, что их написали до твоего рождения. " +
+                    "Если закон несправедлив — ты нарушишь его.",
+                score: stats.rebellion * 3 + stats.strength
+            },
+            {
+                symbol: "🌌",
+                name: "Тот, Кого Не Смогла Найти Судьба",
+                rarity: "🌑 МИФИЧЕСКАЯ СУДЬБА",
+                path: "Свободы",
+                description:
+                    "Небеса записывают имена всех рождённых. Твоего имени среди них нет.",
+                score: stats.freedom * 2 + stats.rebellion * 2
+            }
+        ]
 
     };
 
-    return destinies[selectedPath];
+    const possibleDestinies = destinies[selectedPath];
+
+    let bestDestiny = possibleDestinies[0];
+
+    for (let i = 1; i < possibleDestinies.length; i++) {
+
+        if (possibleDestinies[i].score > bestDestiny.score) {
+            bestDestiny = possibleDestinies[i];
+        }
+
+    }
+
+    return bestDestiny;
 }
 
 
@@ -429,13 +592,22 @@ function restartQuiz() {
         "Свобода": 0
     };
 
+    stats = {
+        strength: 0,
+        power: 0,
+        love: 0,
+        freedom: 0,
+        cruelty: 0,
+        loyalty: 0,
+        rebellion: 0,
+        sacrifice: 0
+    };
+
     showQuestion();
 }
 
 
 showQuestion();
 
-</script>
-
-</body>
+</script></body>
 </html>
