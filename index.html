@@ -903,4 +903,62 @@ function showQuestion() {
 
         button.addEventListener("click", function() {
 
-            selecte
+selectedAnswers.push({
+    question: currentQuestion,
+    answer: index
+});
+
+applyAnswer(currentQuestion, index);
+
+currentQuestion++;
+
+if (currentQuestion < questions.length) {
+
+    showQuestion();
+
+} else {
+
+    showResult();
+
+}
+
+});
+
+answers.appendChild(button);
+
+});
+
+}
+
+function startQuiz() {
+
+currentQuestion = 0;
+
+selectedAnswers = [];
+
+resetStats();
+
+showScreen(quizScreen);
+
+showQuestion();
+
+}
+
+function restartQuiz() {
+
+currentQuestion = 0;
+
+selectedAnswers = [];
+
+resetStats();
+
+showScreen(startScreen);
+
+}
+
+startButton.addEventListener("click", startQuiz);
+
+restartButton.addEventListener("click", restartQuiz);
+
+</script></body>
+</html>
