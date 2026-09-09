@@ -1310,96 +1310,84 @@ function getDestiny() {
 
     const mainPath = getMainPath();
 
+    const candidates = destinies.filter(function(destiny) {
+        return destiny.path === mainPath;
+    });
 
-    const candidates =
-        destinies.filter(function(destiny) {
+    /*
+       Судьба теперь определяется не одним порогом, а резонансом
+       нескольких скрытых черт. Это делает близкие ответы разными,
+       но сохраняет связь результата с выбором игрока.
+    */
 
-            return destiny.path === mainPath;
-
-        });
-
-
-    let index = 0;
-
+    let scores = [0, 0, 0, 0];
 
     if (mainPath === "Сила") {
-
-        if (stats.cruelty >= 2) {
-
-            index = 2;
-
-        } else if (stats.strength >= 4) {
-
-            index = 3;
-
-        } else if (stats.rebellion >= 2) {
-
-            index = 1;
-
-        }
-
+        scores = [
+            stats.cruelty * 3 + stats.rebellion,
+            stats.loyalty * 3 + stats.sacrifice * 2,
+            stats.cruelty * 2 + stats.rebellion * 3,
+            stats.strength + stats.freedom * 4
+        ];
     }
-
 
     if (mainPath === "Власть") {
-
-        if (stats.cruelty >= 2) {
-
-            index = 3;
-
-        } else if (stats.power >= 4) {
-
-            index = 2;
-
-        } else if (stats.loyalty >= 2) {
-
-            index = 1;
-
-        }
-
+        scores = [
+            stats.power * 3 + stats.strength,
+            stats.loyalty * 3 + stats.sacrifice,
+            stats.power * 2 + stats.rebellion * 3,
+            stats.power * 3 + stats.cruelty * 2
+        ];
     }
-
 
     if (mainPath === "Любовь") {
-
-        if (stats.sacrifice >= 3) {
-
-            index = 3;
-
-        } else if (stats.loyalty >= 3) {
-
-            index = 2;
-
-        } else if (stats.love >= 4) {
-
-            index = 1;
-
-        }
-
+        scores = [
+            stats.loyalty * 3 + stats.sacrifice,
+            stats.love * 3 + stats.sacrifice * 2,
+            stats.loyalty * 2 + stats.love * 2 + stats.rebellion,
+            stats.sacrifice * 4 + stats.love
+        ];
     }
-
 
     if (mainPath === "Свобода") {
-
-        if (stats.rebellion >= 3) {
-
-            index = 3;
-
-        } else if (stats.freedom >= 4) {
-
-            index = 2;
-
-        } else if (stats.rebellion >= 2) {
-
-            index = 1;
-
-        }
-
+        scores = [
+            stats.freedom * 3 + stats.strength,
+            stats.freedom * 2 + stats.rebellion * 2,
+            stats.rebellion * 4,
+            stats.freedom * 3 + stats.rebellion * 2 + stats.strength
+        ];
     }
 
+    let index = 0;
+    let bestScore = scores[0];
 
-    return candidates[index];
+    for (let i = 1; i < scores.length; i++) {
+        if (scores[i] > bestScore) {
+            bestScore = scores[i];
+            index = i;
+        }
+    }
 
+    /*
+       Если два архетипа имеют одинаковый резонанс, порядок ответов
+       становится последним решением Небес. Поэтому даже очень похожие
+       комбинации не обязаны давать одну и ту же судьбу.
+    */
+    const tieIndexes = [];
+
+    for (let i = 0; i < scores.length; i++) {
+        if (scores[i] === bestScore) tieIndexes.push(i);
+    }
+
+    if (tieIndexes.length > 1) {
+        const fateSignature = selectedAnswers.reduce(function(sum, answer, i) {
+            return sum + (answer + 1) * (i + 2) * (i + 3);
+        }, 0);
+
+        index = tieIndexes[fateSignature % tieIndexes.length];
+    }
+
+    return candidates[index] || candidates[0];
 }
 
 
@@ -1551,38 +1539,33 @@ function loadChallenge() {
     const params = new URLSearchParams(window.location.search);
     const compactId = Number(params.get("c"));
 
-    let challengedBy = null;
-    let rarity = null;
-    let path = null;
+    /*
+       Вызов существует только в момент перехода по специальной ссылке.
+       После показа очищаем адресную строку, поэтому:
+       - главная страница никогда не показывает старый вызов;
+       - перезагрузка не повторяет вызов;
+       - обычная ссылка приложения остаётся чистой.
+    */
+    if (!Number.isInteger(compactId) || !destinies[compactId]) return;
 
-    if (Number.isInteger(compactId) && destinies[compactId]) {
-        const destiny = destinies[compactId];
-        challengedBy = destiny.title;
-        rarity = destiny.rarity;
-        path = destiny.path;
-    } else {
-        // Поддержка старых ссылок, чтобы уже отправленные вызовы не сломались.
-        challengedBy = params.get("challenge");
-        rarity = params.get("rarity");
-        path = params.get("path");
-    }
-
-    if (!challengedBy) return;
+    const destiny = destinies[compactId];
 
     challengeText.textContent =
-        "Тебе бросили вызов: «" +
-        challengedBy +
-        "»" +
-        (rarity ? " · " + rarity : "") +
-        (path ? " · " + path : "") +
-        ". Сможешь получить судьбу сильнее?";
+        "Тебе бросили вызов судьбой «" +
+        destiny.title +
+        "». Сможешь получить судьбу сильнее?";
 
     challengeBanner.classList.remove("hidden");
+
+    window.history.replaceState(
+        {},
+        document.title,
+        window.location.pathname
+    );
 
 }
 
 loadChallenge();
-
 
 /* =========================
    START
