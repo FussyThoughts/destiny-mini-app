@@ -549,7 +549,7 @@ class="screen hidden">
         class="friend-button"
         type="button"
     >
-        ◈ Узнать судьбу друга
+        ⚔️ Бросить вызов другу
     </button>
 
     <button
@@ -1416,8 +1416,7 @@ function getShareMessage() {
         " · " +
         resultPath.textContent +
         "\n\n" +
-        "А какая судьба достанется тебе?\n" +
-        window.location.href
+        "А какая судьба достанется тебе?"
     );
 
 }
@@ -1547,9 +1546,11 @@ async function challengeFriend() {
     await openShare(
         "Мне выпала судьба «" +
         resultTitle.textContent +
-        "».\n\n" +
-        "Теперь твоя очередь. Узнай, что выберут Небеса для тебя.",
-        "Узнай свою судьбу"
+        "» — " +
+        resultRarity.textContent +
+        ".\n\n" +
+        "⚔️ Бросаю тебе вызов. Пройди испытание и узнай, какая судьба достанется тебе.",
+        "Вызов судьбы"
     );
 
 }
