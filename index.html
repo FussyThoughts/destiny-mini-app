@@ -701,6 +701,68 @@ button {
   .stat-row span,.stat-row b{font-size:14px}
 }
 
+/* ===== v10.1 LAYOUT FIX ===== */
+/* The portrait frame must occupy the full content width. */
+.profile-visual{
+  width:100%;
+  max-width:560px;
+  height:420px;
+  margin:24px auto 18px;
+  display:block;
+}
+.hero-art{
+  width:100%;
+  height:100%;
+  left:0;
+  top:0;
+  object-fit:cover;
+  object-position:58% center;
+  transform:none;
+}
+/* The source portraits have the figure slightly left of center;
+   this position compensates for that composition on both desktop and mobile. */
+.profile-visual.path-power .hero-art{object-position:58% center}
+.profile-visual.path-authority .hero-art{object-position:58% center}
+.profile-visual.path-love .hero-art{object-position:58% center}
+.profile-visual.path-freedom .hero-art{object-position:58% center}
+
+/* Desktop quiz: use the available screen width instead of a narrow card. */
+@media (min-width:700px){
+  #quizScreen{
+    max-width:900px;
+    padding-left:48px;
+    padding-right:48px;
+  }
+  #quizScreen .quiz{
+    width:100%;
+    max-width:780px;
+  }
+  #quizScreen .progress{font-size:13px; margin-bottom:32px}
+  #quizScreen .question{
+    max-width:760px;
+    font-size:30px;
+    line-height:1.42;
+    margin-bottom:36px;
+  }
+  #quizScreen .answers{gap:15px}
+  #quizScreen .answer{
+    font-size:19px;
+    line-height:1.45;
+    padding:20px 22px;
+    border-radius:15px;
+  }
+}
+
+@media (max-width:699px){
+  .profile-visual{height:390px; max-width:560px}
+  .hero-art{object-position:58% center}
+}
+
+@media (max-width:420px){
+  .profile-visual{height:360px}
+  .hero-art{object-position:58% center}
+}
+
 </style>
 </head>
 
