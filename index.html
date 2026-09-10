@@ -1126,214 +1126,31 @@ button {
 </style>
 
 
-<style id="v11-2-css">
-/* v11.2 — cinematic face + verdict */
-.start-screen-cinematic{
-    position:relative;
-    width:min(980px,94vw);
-    min-height:660px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow:hidden;
-    border:1px solid rgba(210,185,225,.22);
-    border-radius:28px;
-    background:
-      radial-gradient(circle at 50% 42%,rgba(155,105,205,.20),transparent 31%),
-      radial-gradient(circle at 50% 85%,rgba(80,60,110,.16),transparent 48%),
-      rgba(10,8,16,.62);
-    box-shadow:0 25px 90px rgba(0,0,0,.45), inset 0 0 70px rgba(160,110,210,.05);
+<style id="v11-2-safe-css">
+/* v11.2 SAFE PATCH — no DOM restructuring */
+@media(min-width:701px){
+  #startScreen{max-width:980px;width:94vw;min-height:660px;padding:8vh 40px 7vh;}
+  #startScreen .symbol{font-size:112px !important;line-height:1;margin-bottom:22px;filter:drop-shadow(0 0 24px rgba(210,175,235,.28));animation:v112Symbol 5s ease-in-out infinite;}
+  #startScreen .start-title{font-size:clamp(72px,9vw,122px) !important;line-height:.95 !important;letter-spacing:.14em !important;margin-left:.14em;}
+  #startScreen .subtitle{max-width:700px;margin:28px auto 34px !important;font-size:clamp(18px,2vw,25px) !important;line-height:1.5 !important;}
+  #startScreen .start-button{min-width:360px;min-height:72px;font-size:18px !important;letter-spacing:2px;animation:v112Button 2.8s ease-in-out infinite;}
+  #startScreen .note{margin-top:18px !important;font-size:12px !important;letter-spacing:2px;}
 }
-.start-screen-cinematic::before,
-.start-screen-cinematic::after{
-    content:"";
-    position:absolute;
-    inset:8%;
-    border:1px solid rgba(210,185,225,.08);
-    border-radius:50%;
-    animation:v112Orbit 14s linear infinite;
-}
-.start-screen-cinematic::after{
-    inset:18%;
-    border-color:rgba(210,185,225,.055);
-    animation-duration:21s;
-    animation-direction:reverse;
-}
-.start-cosmic{
-    position:absolute;
-    inset:0;
-    overflow:hidden;
-    pointer-events:none;
-}
-.start-cosmic i{
-    position:absolute;
-    width:3px;height:3px;
-    border-radius:50%;
-    background:rgba(235,220,245,.8);
-    box-shadow:0 0 9px rgba(220,190,240,.7);
-    animation:v112Star 4.5s ease-in-out infinite;
-}
-.start-cosmic i:nth-child(1){left:14%;top:23%;animation-delay:-1s}
-.start-cosmic i:nth-child(2){left:82%;top:28%;animation-delay:-2.7s}
-.start-cosmic i:nth-child(3){left:23%;top:72%;animation-delay:-3.2s}
-.start-cosmic i:nth-child(4){left:76%;top:69%;animation-delay:-.8s}
-.start-cosmic i:nth-child(5){left:49%;top:12%;animation-delay:-2s}
-.start-cosmic i:nth-child(6){left:55%;top:88%;animation-delay:-3.8s}
-
-.start-core{
-    position:relative;
-    z-index:2;
-    width:min(760px,90%);
-    text-align:center;
-    animation:v112Breath 4s ease-in-out infinite;
-}
-.start-symbol{
-    font-size:112px !important;
-    line-height:1;
-    margin-bottom:22px;
-    filter:drop-shadow(0 0 24px rgba(210,175,235,.28));
-    animation:v112Symbol 5s ease-in-out infinite;
-}
-.start-title{
-    font-size:clamp(72px,9vw,122px) !important;
-    line-height:.95 !important;
-    letter-spacing:.14em !important;
-    margin-left:.14em;
-    text-shadow:0 0 35px rgba(205,165,235,.18);
-}
-.start-subtitle{
-    max-width:700px;
-    margin:28px auto 34px !important;
-    font-size:clamp(18px,2vw,25px) !important;
-    line-height:1.5 !important;
-}
-.start-button{
-    min-width:360px;
-    min-height:72px;
-    font-size:18px !important;
-    letter-spacing:2px;
-    box-shadow:0 0 0 rgba(180,130,220,0);
-    animation:v112Button 2.8s ease-in-out infinite;
-}
-.start-note{
-    margin-top:18px !important;
-    font-size:12px !important;
-    letter-spacing:2px;
-}
-
-.verdict-cinematic{
-    position:relative;
-    width:min(980px,94vw);
-    min-height:650px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow:hidden;
-    border-radius:28px;
-    background:
-      radial-gradient(circle at 50% 43%,rgba(160,110,205,.17),transparent 34%),
-      rgba(8,7,13,.76);
-}
-.verdict-cinematic .reveal-core{
-    width:min(820px,92%);
-    transform:scale(1.12);
-}
-.verdict-cinematic .reveal-kicker{
-    font-size:14px;
-    letter-spacing:6px;
-}
-.verdict-cinematic .reveal-whisper{
-    font-size:22px;
-}
-.verdict-cinematic .reveal-rarity{
-    font-size:24px;
-    letter-spacing:7px;
-}
-.verdict-cinematic .reveal-title{
-    font-size:clamp(42px,5vw,64px);
-}
-.verdict-cinematic .reveal-continue{
-    min-width:260px;
-    min-height:54px;
-    font-size:14px;
-}
-
-.magic-beads{
-    position:absolute;
-    inset:0;
-    z-index:4;
-    pointer-events:none;
-    overflow:hidden;
-    border-radius:inherit;
-}
-.magic-bead{
-    position:absolute;
-    width:7px;
-    height:7px;
-    border-radius:50%;
-    opacity:0;
-    background:var(--magic,#d9b7ef);
-    box-shadow:
-      0 0 5px var(--magic,#d9b7ef),
-      0 0 14px var(--magic,#d9b7ef),
-      0 0 26px var(--magic,#d9b7ef);
-    animation:v112Bead var(--dur,5s) ease-in-out infinite;
-    animation-delay:var(--delay,0s);
-}
-.magic-bead.small{width:4px;height:4px}
-.magic-bead.large{width:10px;height:10px}
-.magic-ribbon{
-    position:absolute;
-    width:38%;
-    height:70%;
-    left:31%;
-    top:15%;
-    border-radius:50%;
-    border:1px solid var(--magic,#d9b7ef);
-    opacity:.16;
-    filter:blur(.4px);
-    box-shadow:0 0 20px var(--magic,#d9b7ef);
-    animation:v112Ribbon 7s ease-in-out infinite;
-}
-@keyframes v112Orbit{to{transform:rotate(360deg)}}
-@keyframes v112Star{
-    0%,100%{opacity:.12;transform:scale(.6)}
-    50%{opacity:.9;transform:scale(1.7)}
-}
-@keyframes v112Breath{
-    0%,100%{transform:translateY(0)}
-    50%{transform:translateY(-7px)}
-}
-@keyframes v112Symbol{
-    0%,100%{transform:rotate(0) scale(1)}
-    50%{transform:rotate(7deg) scale(1.06)}
-}
-@keyframes v112Button{
-    0%,100%{transform:scale(1);box-shadow:0 0 0 rgba(180,130,220,0)}
-    50%{transform:scale(1.025);box-shadow:0 0 34px rgba(180,130,220,.18)}
-}
-@keyframes v112Bead{
-    0%{opacity:0;transform:translate3d(0,40px,0) scale(.5)}
-    15%{opacity:.9}
-    50%{opacity:.72;transform:translate3d(var(--dx,20px),-110px,0) scale(1)}
-    85%{opacity:.5}
-    100%{opacity:0;transform:translate3d(calc(var(--dx,20px)*-1),-240px,0) scale(.35)}
-}
-@keyframes v112Ribbon{
-    0%,100%{transform:rotate(-9deg) scale(.95)}
-    50%{transform:rotate(9deg) scale(1.06)}
-}
-@media(max-width:700px){
-    .start-screen-cinematic,.verdict-cinematic{
-        min-height:560px;
-        width:94vw;
-        border-radius:20px;
-    }
-    .start-symbol{font-size:78px !important}
-    .start-button{min-width:280px}
-    .verdict-cinematic .reveal-core{transform:scale(1)}
-    .verdict-cinematic .reveal-title{font-size:32px}
-}
+#revealOverlay .reveal-core{width:min(820px,92%);transform:scale(1.12)}
+#revealOverlay .reveal-kicker{font-size:14px;letter-spacing:6px}
+#revealOverlay .reveal-whisper{font-size:22px}
+#revealOverlay .reveal-rarity{font-size:24px;letter-spacing:7px}
+#revealOverlay .reveal-title{font-size:clamp(42px,5vw,64px)}
+#revealOverlay .reveal-continue{min-width:260px;min-height:54px;font-size:14px}
+.magic-beads{position:absolute;inset:0;z-index:4;pointer-events:none;overflow:hidden;border-radius:inherit;}
+.magic-bead{position:absolute;width:7px;height:7px;border-radius:50%;opacity:0;background:var(--magic,#d9b7ef);box-shadow:0 0 5px var(--magic,#d9b7ef),0 0 14px var(--magic,#d9b7ef),0 0 26px var(--magic,#d9b7ef);animation:v112Bead var(--dur,5s) ease-in-out infinite;animation-delay:var(--delay,0s)}
+.magic-bead.small{width:4px;height:4px}.magic-bead.large{width:10px;height:10px}
+.magic-ribbon{position:absolute;width:38%;height:70%;left:31%;top:15%;border-radius:50%;border:1px solid var(--magic,#d9b7ef);opacity:.16;filter:blur(.4px);box-shadow:0 0 20px var(--magic,#d9b7ef);animation:v112Ribbon 7s ease-in-out infinite}
+@keyframes v112Symbol{0%,100%{transform:rotate(0) scale(1)}50%{transform:rotate(7deg) scale(1.06)}}
+@keyframes v112Button{0%,100%{transform:scale(1);box-shadow:0 0 0 rgba(180,130,220,0)}50%{transform:scale(1.025);box-shadow:0 0 34px rgba(180,130,220,.18)}}
+@keyframes v112Bead{0%{opacity:0;transform:translate3d(0,40px,0) scale(.5)}15%{opacity:.9}50%{opacity:.72;transform:translate3d(var(--dx,20px),-110px,0) scale(1)}85%{opacity:.5}100%{opacity:0;transform:translate3d(calc(var(--dx,20px)*-1),-240px,0) scale(.35)}}
+@keyframes v112Ribbon{0%,100%{transform:rotate(-9deg) scale(.95)}50%{transform:rotate(9deg) scale(1.06)}}
+@media(max-width:700px){#revealOverlay .reveal-core{transform:scale(1)}#revealOverlay .reveal-title{font-size:32px}}
 </style>
 
 </head>
@@ -1345,7 +1162,7 @@ button {
      v11 DESTINY REVEAL
 ========================= -->
 <div id="revealOverlay" class="reveal-overlay" aria-hidden="true">
-    <div class="verdict-cinematic"><div class="reveal-core">
+    <div class="reveal-core">
         <div class="reveal-kicker">НЕБЕСНЫЙ ВЕРДИКТ</div>
         <div class="reveal-line"></div>
         <div id="revealWhisper" class="reveal-whisper"></div>
@@ -1361,9 +1178,7 @@ button {
      START SCREEN
 ========================= -->
 
-<section id="startScreen" class="screen"><div class="start-screen-cinematic">
-<div class="start-cosmic"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-<div class="start-core">
+<section id="startScreen" class="screen">
 
     <div class="symbol">☯</div>
 
@@ -1371,7 +1186,7 @@ button {
         СУДЬБА
     </h1>
 
-    <div class="subtitle start-subtitle">
+    <div class="subtitle">
         Небеса уже сделали свой выбор.<br>
         Осталось узнать — какой.
     </div>
@@ -1393,7 +1208,7 @@ button {
         5 вопросов · 1 судьба
     </div>
 
-</div></div></section>
+</section>
 
 
 <!-- =========================
@@ -1431,6 +1246,7 @@ class="screen hidden">
         </div>
 
         <div id="profileVisual" class="profile-visual">
+            <div id="magicBeads" class="magic-beads" aria-hidden="true"></div>
             <div class="profile-aura"></div>
             <div class="profile-ring"></div>
             <div class="hero-particle p1"></div><div class="hero-particle p2"></div>
@@ -2294,39 +2110,6 @@ const heroArtByPath = {
 };
 
 
-
-/* v11.2 magical bead layer */
-function activateMagicBeads(destiny){
-    const layer = document.getElementById("magicBeads");
-    if (!layer || !destiny) return;
-
-    const palette = {
-        "Сила":"#d94f58",
-        "Власть":"#d7ad55",
-        "Любовь":"#e65d87",
-        "Свобода":"#55c8c8"
-    };
-
-    const magic = palette[destiny.path] || "#d9b7ef";
-    layer.style.setProperty("--magic", magic);
-
-    const beads = layer.querySelectorAll(".magic-bead");
-    beads.forEach(function(bead, i){
-        const left = 12 + ((i * 19) % 76);
-        const bottom = 8 + ((i * 13) % 40);
-        const dx = ((i % 2 ? 1 : -1) * (16 + (i * 11) % 55)) + "px";
-        bead.style.left = left + "%";
-        bead.style.bottom = bottom + "%";
-        bead.style.setProperty("--dx", dx);
-        bead.style.setProperty("--delay", (-i * .65) + "s");
-        bead.style.setProperty("--dur", (4.2 + (i % 4) * .7) + "s");
-    });
-
-    layer.classList.remove("magic-active");
-    void layer.offsetWidth;
-    layer.classList.add("magic-active");
-}
-
 /* =========================
    v11 VIRAL LAYER
 ========================= */
@@ -2630,6 +2413,30 @@ async function createShareCard(){
 }
 
 
+
+function activateMagicBeads(destiny){
+    const layer=document.getElementById("magicBeads");
+    if(!layer) return;
+    const colors={"Сила":"#d94f58","Власть":"#d7ad55","Любовь":"#e65d87","Свобода":"#55c8c8"};
+    const color=colors[destiny.path]||"#d9b7ef";
+    layer.innerHTML="";
+    const ribbon=document.createElement("div");
+    ribbon.className="magic-ribbon";
+    ribbon.style.setProperty("--magic",color);
+    layer.appendChild(ribbon);
+    for(let i=0;i<18;i++){
+        const bead=document.createElement("i");
+        bead.className="magic-bead"+(i%7===0?" large":i%3===0?" small":"");
+        bead.style.setProperty("--magic",color);
+        bead.style.left=(8+Math.random()*84)+"%";
+        bead.style.top=(48+Math.random()*42)+"%";
+        bead.style.setProperty("--dx",(-55+Math.random()*110)+"px");
+        bead.style.setProperty("--dur",(4.2+Math.random()*2.8)+"s");
+        bead.style.setProperty("--delay",(-Math.random()*5)+"s");
+        layer.appendChild(bead);
+    }
+}
+
 /* =========================
    SHOW RESULT
 ========================= */
@@ -2774,16 +2581,12 @@ function showResult(skipReveal){
             profileVisual.classList.remove("v11-photo-reveal");
             void profileVisual.offsetWidth;
             profileVisual.classList.add("v11-photo-reveal");
+            setTimeout(function(){ activateMagicBeads(destiny); },850);
         }
 
         if (incomingChallengeIndex >= 0) {
             showBattle(destiny);
         }
-
-        // Magic appears AFTER the portrait reveal, not before it.
-        setTimeout(function(){
-            activateMagicBeads(destiny);
-        }, 850);
     };
 
     if (skipReveal) {
