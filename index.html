@@ -636,6 +636,116 @@ button {
         padding: 28px 19px;
     }
 }
+
+/* === v8: RPG Character Screen === */
+.character-screen {
+  margin-top: 22px;
+  padding: 18px;
+  border-radius: 24px;
+  border: 1px solid rgba(255,255,255,.14);
+  background:
+    radial-gradient(circle at 50% 12%, rgba(255,255,255,.08), transparent 34%),
+    linear-gradient(145deg, rgba(20,18,36,.98), rgba(9,9,18,.98));
+  box-shadow: 0 18px 55px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
+}
+.character-screen .screen-kicker {
+  text-align:center;
+  font-size:11px;
+  letter-spacing:2.8px;
+  opacity:.58;
+  margin-bottom:12px;
+}
+.character-portrait {
+  position:relative;
+  min-height:205px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.12);
+  background:
+    radial-gradient(circle, rgba(132,102,255,.22), transparent 38%),
+    linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.2));
+}
+.character-portrait::before,
+.character-portrait::after {
+  content:"";
+  position:absolute;
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:50%;
+}
+.character-portrait::before { width:145px; height:145px; }
+.character-portrait::after { width:185px; height:185px; opacity:.5; }
+.portrait-symbol {
+  position:relative;
+  z-index:2;
+  width:108px;
+  height:108px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  font-size:54px;
+  background:rgba(10,10,20,.72);
+  border:1px solid rgba(255,255,255,.22);
+  box-shadow:0 0 35px rgba(170,140,255,.25);
+}
+.character-name {
+  margin:16px 0 4px;
+  text-align:center;
+  font-size:24px;
+  line-height:1.15;
+  font-weight:900;
+}
+.character-title {
+  text-align:center;
+  font-size:13px;
+  opacity:.68;
+}
+.character-tags {
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:7px;
+  margin:13px 0 16px;
+}
+.character-tag {
+  padding:7px 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);
+  font-size:11px;
+  font-weight:700;
+}
+.character-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+.character-stat-box {
+  padding:11px 12px;
+  border-radius:14px;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.08);
+}
+.character-stat-label {
+  font-size:10px;
+  letter-spacing:1px;
+  opacity:.5;
+  text-transform:uppercase;
+}
+.character-stat-value {
+  margin-top:4px;
+  font-size:13px;
+  font-weight:800;
+  line-height:1.25;
+}
+.character-share {
+  margin-top:13px;
+  width:100%;
+}
+
 </style>
 </head>
 
@@ -1395,6 +1505,55 @@ function getMainPath() {
    DESTINY
 ========================= */
 
+
+function renderCharacterScreen() {
+  const screen = document.getElementById('characterScreen');
+  if (!screen || typeof currentDestiny === 'undefined' || !currentDestiny) return;
+
+  const d = currentDestiny;
+  const symbolMap = {
+    "Носитель Кровавого Клинка":"⚔️","Последний Страж":"🛡️","Пепельный Разрушитель":"☄️",
+    "Воин Небесного Предела":"🌌","Властелин Девяти Небес":"👑","Безмолвный Судья":"⚖️",
+    "Кукловод Судеб":"🕸️","Тот, Кто Сидит Над Небесами":"☯️",
+    "Хранитель Последнего Обета":"❤️","Тот, Кто Вернул Утраченное":"🌙",
+    "Связанный Красной Нитью":"🧵","Любящий Даже После Смерти":"🌹",
+    "Странник За Пределами Небес":"🕊️","Искатель Третьего Пути":"🚪",
+    "Отступник Небесного Закона":"🔥","Тот, Кого Не Смогла Найти Судьба":"👁️"
+  };
+
+  const role = d.role || "Идущий по своему пути";
+  const weapon = d.weapon || "Неизвестно";
+  const aura = d.aura || "Неизвестно";
+  const temperament = d.temperament || "Неизвестно";
+  const style = d.style || "Неизвестно";
+  const talent = d.talent || "Неизвестно";
+
+  document.getElementById('portraitSymbol').textContent = symbolMap[d.title] || "✦";
+  document.getElementById('characterName').textContent = d.title;
+  document.getElementById('characterTitle').textContent =
+    (d.rarity || "") + " · " + (d.path || "Судьба");
+
+  document.getElementById('characterTags').innerHTML = [
+    "Черта: " + (d.trait || "—"),
+    "Путь: " + (d.path || "—")
+  ].map(x => '<div class="character-tag">' + x + '</div>').join('');
+
+  const rows = [
+    ["Роль", role],
+    ["Оружие", weapon],
+    ["Аура", aura],
+    ["Темперамент", temperament],
+    ["Стиль боя", style],
+    ["Особый талант", talent]
+  ];
+  document.getElementById('characterGrid').innerHTML = rows.map(([a,b]) =>
+    '<div class="character-stat-box"><div class="character-stat-label">'+a+
+    '</div><div class="character-stat-value">'+b+'</div></div>'
+  ).join('');
+
+  screen.classList.remove('hidden');
+}
+
 function getDestiny() {
 
     const mainPath = getMainPath();
@@ -1569,6 +1728,8 @@ function showResult() {
 
     showScreen(resultScreen);
 
+
+  renderCharacterScreen();
 }
 
 
@@ -1977,6 +2138,18 @@ if (friendButton) {
 }
 
 </script>
+
+
+<div id="characterScreen" class="character-screen hidden">
+  <div class="screen-kicker">ЛИЧНОЕ ДОСЬЕ · МИР СУДЬБЫ</div>
+  <div class="character-portrait">
+    <div id="portraitSymbol" class="portrait-symbol">✦</div>
+  </div>
+  <div id="characterName" class="character-name">Герой</div>
+  <div id="characterTitle" class="character-title">Пробуждение судьбы</div>
+  <div id="characterTags" class="character-tags"></div>
+  <div id="characterGrid" class="character-grid"></div>
+</div>
 
 </body>
 </html>
