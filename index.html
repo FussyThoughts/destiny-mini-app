@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#100c18">
-<title>СУДЬБА — v10.2</title>
+<title>СУДЬБА — v11.1</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
@@ -1014,6 +1014,117 @@ button {
 }
 </style>
 
+
+<style id="v11-1-polish">
+/* ===== v11.1 START SCREEN — DESKTOP ===== */
+@media (min-width:700px){
+    #startScreen{
+        max-width:980px;
+        padding-left:48px;
+        padding-right:48px;
+    }
+    #startScreen .symbol{
+        font-size:108px;
+        margin-bottom:22px;
+    }
+    #startScreen .start-title{
+        font-size:78px;
+        letter-spacing:16px;
+    }
+    #startScreen .subtitle{
+        max-width:650px;
+        margin-top:28px;
+        font-size:24px;
+        line-height:1.65;
+    }
+    #startScreen .start-button{
+        margin-top:52px;
+        padding:20px 44px;
+        border-radius:14px;
+        font-size:21px;
+    }
+    #startScreen .note{
+        margin-top:20px;
+        font-size:15px;
+    }
+    #startScreen .challenge-banner{
+        max-width:720px;
+        margin-top:30px;
+    }
+}
+
+/* ===== v11.1 PORTRAIT EVENT ANIMATION ===== */
+.profile-visual.v11-photo-reveal .hero-art{
+    animation:v11PhotoReveal 1.35s cubic-bezier(.18,.78,.18,1) both;
+}
+.profile-visual.v11-photo-reveal .profile-aura{
+    animation:v11AuraBurst 1.5s ease-out both;
+}
+.profile-visual.v11-photo-reveal .profile-ring{
+    animation:v11RingBurst 1.8s cubic-bezier(.16,.8,.2,1) both;
+}
+.profile-visual.v11-photo-reveal .hero-particle{
+    animation:v11ParticleBurst 1.5s ease-out both;
+}
+.profile-visual.v11-photo-reveal::before{
+    content:"";
+    position:absolute;
+    z-index:6;
+    top:-20%;
+    left:-35%;
+    width:35%;
+    height:140%;
+    pointer-events:none;
+    transform:rotate(14deg);
+    background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.10),
+        rgba(224,194,255,.42),
+        rgba(255,255,255,.08),
+        transparent
+    );
+    filter:blur(2px);
+    animation:v11LightSweep 1.25s .15s ease-out both;
+}
+.profile-visual.v11-photo-reveal::after{
+    animation:v11PortraitVignette 1.2s ease-out both;
+}
+@keyframes v11PhotoReveal{
+    0%{opacity:.08;transform:scale(1.09);filter:saturate(.55) contrast(1.18) brightness(.55) blur(2px)}
+    42%{opacity:.72;filter:saturate(.82) contrast(1.08) brightness(.82) blur(.4px)}
+    100%{opacity:1;transform:scale(1);filter:saturate(1.03) contrast(1.03) brightness(1) blur(0)}
+}
+@keyframes v11LightSweep{
+    0%{left:-35%;opacity:0}
+    15%{opacity:1}
+    100%{left:115%;opacity:0}
+}
+@keyframes v11AuraBurst{
+    0%{opacity:.1;transform:translate(-50%,-50%) scale(.72)}
+    45%{opacity:1;transform:translate(-50%,-50%) scale(1.16)}
+    100%{opacity:.75;transform:translate(-50%,-50%) scale(1.08)}
+}
+@keyframes v11RingBurst{
+    0%{opacity:0;transform:translate(-50%,-50%) scale(.72) rotate(-35deg)}
+    45%{opacity:1;transform:translate(-50%,-50%) scale(1.08) rotate(8deg)}
+    100%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}
+}
+@keyframes v11ParticleBurst{
+    0%{opacity:0;transform:translateY(18px) scale(.2)}
+    35%{opacity:1;transform:translateY(-10px) scale(1.35)}
+    100%{opacity:.55;transform:translateY(-18px) scale(1)}
+}
+@keyframes v11PortraitVignette{
+    0%{background:
+        linear-gradient(to bottom,rgba(5,4,12,.55) 0%,transparent 40%,rgba(5,4,12,.92) 100%),
+        radial-gradient(circle at 50% 45%,rgba(245,225,255,.20) 0%,rgba(4,3,10,.60) 75%)}
+    100%{background:
+        linear-gradient(to bottom,rgba(5,4,12,.08) 0%,transparent 48%,rgba(5,4,12,.72) 100%),
+        radial-gradient(circle at 50% 45%,transparent 42%,rgba(4,3,10,.35) 100%)}
+}
+</style>
+
 </head>
 
 
@@ -1174,10 +1285,6 @@ class="screen hidden">
         </div>
 
         <div id="battlePanel" class="battle-panel hidden"></div>
-        <div class="card-share-preview">
-            ТВОЯ СУДЬБА — ЭТО КОНТЕНТ. Покажи её тому, кому хочешь бросить вызов.
-        </div>
-
     </div>
 
     <button
@@ -2250,7 +2357,8 @@ async function createShareCard(){
                 if (navigator.canShare({files:[file]})) {
                     await navigator.share({
                         title: "Моя судьба",
-                        text: getShareMessage(),
+                        text: getShareMessage() + "\n\n" + window.location.origin + window.location.pathname,
+                        url: window.location.origin + window.location.pathname,
                         files: [file]
                     });
                     return;
@@ -2269,7 +2377,8 @@ async function createShareCard(){
 
         await openShare(
             getShareMessage(),
-            "Моя судьба — " + resultTitle.textContent
+            "Моя судьба — " + resultTitle.textContent,
+            window.location.origin + window.location.pathname
         );
     },"image/png");
 }
@@ -2408,11 +2517,17 @@ function showResult(skipReveal){
     const render = function(){
         showScreen(resultScreen);
 
-        // Give the result card a tiny re-entry pulse.
+        // Give the result card and portrait a tiny event-like reveal.
         if (destinyCardElement) {
             destinyCardElement.classList.remove("v11-result-pulse");
             void destinyCardElement.offsetWidth;
             destinyCardElement.classList.add("v11-result-pulse");
+        }
+
+        if (profileVisual) {
+            profileVisual.classList.remove("v11-photo-reveal");
+            void profileVisual.offsetWidth;
+            profileVisual.classList.add("v11-photo-reveal");
         }
 
         if (incomingChallengeIndex >= 0) {
