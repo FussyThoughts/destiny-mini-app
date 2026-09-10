@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#100c18">
-<title>СУДЬБА — v10</title>
+<title>СУДЬБА — v10.2</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
@@ -701,14 +701,18 @@ button {
   .stat-row span,.stat-row b{font-size:14px}
 }
 
-/* ===== v10.1 LAYOUT FIX ===== */
-/* The portrait frame must occupy the full content width. */
+/* ===== v10.2 LAYOUT FIX ===== */
+
+/* Portraits: use an almost-full-height portrait frame so the head is never
+   cut off. The frame ratio matches the 600x1066 artwork. */
 .profile-visual{
   width:100%;
   max-width:560px;
-  height:420px;
+  aspect-ratio:600 / 1066;
+  height:auto;
   margin:24px auto 18px;
   display:block;
+  overflow:hidden;
 }
 .hero-art{
   width:100%;
@@ -716,51 +720,70 @@ button {
   left:0;
   top:0;
   object-fit:cover;
-  object-position:58% center;
+  object-position:50% 50%;
   transform:none;
 }
-/* The source portraits have the figure slightly left of center;
-   this position compensates for that composition on both desktop and mobile. */
-.profile-visual.path-power .hero-art{object-position:58% center}
-.profile-visual.path-authority .hero-art{object-position:58% center}
-.profile-visual.path-love .hero-art{object-position:58% center}
-.profile-visual.path-freedom .hero-art{object-position:58% center}
 
-/* Desktop quiz: use the available screen width instead of a narrow card. */
+/* Keep the actual character centered for every path. */
+.profile-visual.path-power .hero-art{object-position:50% 50%}
+.profile-visual.path-authority .hero-art{object-position:50% 50%}
+.profile-visual.path-love .hero-art{object-position:50% 50%}
+.profile-visual.path-freedom .hero-art{object-position:50% 50%}
+
+/* Quiz: move the whole questionnaire upward and make it substantially
+   larger on desktop. */
+#quizScreen{
+  justify-content:flex-start;
+  padding-top:18vh;
+  transform:translateY(-7vh);
+}
+
 @media (min-width:700px){
   #quizScreen{
-    max-width:900px;
+    max-width:980px;
     padding-left:48px;
     padding-right:48px;
   }
   #quizScreen .quiz{
     width:100%;
-    max-width:780px;
+    max-width:880px;
   }
-  #quizScreen .progress{font-size:13px; margin-bottom:32px}
+  #quizScreen .progress{
+    font-size:14px;
+    margin-bottom:28px;
+  }
   #quizScreen .question{
-    max-width:760px;
-    font-size:30px;
-    line-height:1.42;
-    margin-bottom:36px;
+    max-width:860px;
+    font-size:34px;
+    line-height:1.4;
+    margin-bottom:34px;
   }
-  #quizScreen .answers{gap:15px}
+  #quizScreen .answers{
+    gap:16px;
+  }
   #quizScreen .answer{
-    font-size:19px;
-    line-height:1.45;
-    padding:20px 22px;
+    font-size:20px;
+    line-height:1.48;
+    padding:21px 24px;
     border-radius:15px;
   }
 }
 
 @media (max-width:699px){
-  .profile-visual{height:390px; max-width:560px}
-  .hero-art{object-position:58% center}
+  #quizScreen{
+    padding-top:17vh;
+    transform:translateY(-4vh);
+  }
+  .profile-visual{
+    max-width:560px;
+  }
 }
 
 @media (max-width:420px){
-  .profile-visual{height:360px}
-  .hero-art{object-position:58% center}
+  #quizScreen{
+    padding-top:15vh;
+    transform:translateY(-3vh);
+  }
 }
 
 </style>
